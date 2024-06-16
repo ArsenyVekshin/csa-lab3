@@ -49,8 +49,8 @@ class Opcode(str, Enum):
         return str(self.value)
 
 class Addressing(Enum):
-    DIRECT = 0
-    INDIRECT = 1
+    DIRECT_ABS = 0
+    DIRECT_SHIFT = 1
     LOAD = 2
     POST_INC = 3
     POST_DEC = 4

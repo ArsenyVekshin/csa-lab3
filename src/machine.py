@@ -38,7 +38,7 @@ class DataPath:
             case DRSig.NewValue:
                 self.dr = self.alu.value
 
-    def signal_latch_TOS(self, signal=None):
+    def signal_latch_TOS(self, signal=None, arg = None):
         match signal:
             case TOSMux.BR:
                 self.tos = self.br
@@ -50,6 +50,9 @@ class DataPath:
                 self.tos = self.alu.value
             case TOSMux.DataStack:
                 self.tos = self.data_stack.pop()
+            case TOSMux.CR:
+                self.tos = arg
+                assert arg is not None, "Internal error: expected arg for CR -> TOS"
 
     def signal_latch_IP(self, signal=None, arg = None):
         match signal:
@@ -106,14 +109,55 @@ class ControlUnit:
         self.dataPath.alu_operation(Opcode.INC)
         self.dataPath.signal_latch_IP(IPMux.ALU)
 
+
     def addressFetch(self, cmd: Instruction):
+        if cmd.addressing is None: return
 
-        #TODO: версия схемы 1.2 не подходит для разных видов адресации.
-        return
+        if cmd.addressing is not Addressing.DIRECT_ABS:
+            # save current tos to DataStack
+            self.dataPath.dataStack_push()
+
+            # load current IP to DataStack
+            self.dataPath.signal_latch_TOS(TOSMux.IP)
+            self.dataPath.dataStack_push()
+            # load shift value to TOS
+            self.dataPath.signal_latch_TOS(TOSMux.CR, cmd.arg)
+
+            # we got targeted addr
+            self.dataPath.alu_operation(Opcode.ADD)
+            #self.dataPath.signal_latch_AR(ARMux.ALU)
+
+            if cmd.addressing is not Addressing.DIRECT_SHIFT:
+                self.dataPath.signal_latch_AR(ARMux.ALU)
+                self.dataPath.signal_latch_DR(DRSig.READ)
+
+                if cmd.addressing in {Addressing.POST_INC, Addressing.POST_DEC}:
+                    self.dataPath.signal_latch_TOS(TOSMux.ALU)
+
+                    self.dataPath.signal_latch_ALU(ALUMux.TOS)
+                    if cmd.addressing is Addressing.POST_INC:
+                        self.dataPath.alu_operation(Opcode.INC)
+                    elif cmd.addressing is Addressing.POST_DEC:
+                        self.dataPath.alu_operation(Opcode.DEC)
+
+                    self.dataPath.signal_latch_DR(DRSig.NewValue)
+                    self.dataPath.signal_latch_DR(DRSig.WRITE)
+
+                    self.dataPath.signal_latch_ALU(ALUMux.TOS)
+                    if cmd.addressing is Addressing.POST_INC:
+                        self.dataPath.alu_operation(Opcode.DEC)
+                    elif cmd.addressing is Addressing.POST_DEC:
+                        self.dataPath.alu_operation(Opcode.INC)
+
+            # return tos prev value
+            self.dataPath.signal_latch_TOS(TOSMux.DataStack)
 
 
+    def operandFetch(self):
+        self.dataPath.signal_latch_AR(ARMux.ALU)
+        self.dataPath.signal_latch_DR(DRSig.READ)
 
-    def executeCmd(self, cmd: Instruction):
+    def executionFetch(self, cmd: Instruction):
 
         # math \ logic \ if instructions
         if cmd.opcode <= Opcode.BLT:
@@ -130,20 +174,39 @@ class ControlUnit:
         # LD
         if cmd.opcode is Opcode.LD:
             self.dataPath.dataStack_push() # TOS -> stack
+            self.dataPath.signal_latch_TOS(TOSMux.DR)
 
-            self.dataPath.signal_latch_AR(ARMux.CR)
-
+        # ST
+        if cmd.opcode is Opcode.ST:
+            self.dataPath.signal_latch_ALU(ALUMux.TOS)
+            self.dataPath.alu_operation(None)
+            self.dataPath.signal_latch_DR(DRSig.NewValue)
+            self.dataPath.signal_latch_DR(DRSig.WRITE)
 
         # JMP + CALL
         if cmd.opcode in {Opcode.JMP, Opcode.CALL}:
             if cmd.opcode is Opcode.CALL:
                 self.return_stack.push(self.dataPath.ip)
 
-            self.dataPath.signal_latch_ALU(ALUMux.TOS)
-            self.dataPath.alu_operation(None)
             self.dataPath.signal_latch_IP(IPMux.ALU)
 
         # RET
         if cmd.opcode is Opcode.RET:
             self.dataPath.signal_latch_IP(IPMux.ReturnStack, self.return_stack.pop())
+
+        # SWAP
+        if cmd.opcode is Opcode.SWAP:
+            self.dataPath.signal_latch_BR()
+            self.dataPath.dataStack_push()
+            self.dataPath.signal_latch_TOS(TOSMux.BR)
+
+        # DUP
+        if cmd.opcode is Opcode.DUP:
+            self.dataPath.dataStack_push()
+
+        # POP
+        if cmd.opcode is Opcode.DUP:
+            self.dataPath.signal_latch_TOS(TOSMux.DataStack)
+        
+
 

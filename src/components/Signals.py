@@ -6,6 +6,7 @@ class TOSMux(Enum):
     IP = 2
     ALU = 3
     DataStack = 4
+    CR = 5
 
 class ALUMux(Enum):
     TOS = 0
