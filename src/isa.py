@@ -45,6 +45,8 @@ class Opcode(str, Enum):
     IN = "in"       # send ready signal to device
     OUT = "out"     # check ready-status of device
 
+    HLT = "hlt"
+
     def __str__(self):
         return str(self.value)
 

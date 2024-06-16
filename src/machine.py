@@ -103,8 +103,6 @@ class ControlUnit:
         self.dataPath.signal_latch_DR(DRSig.READ)
         self.cr = self.dataPath.dr
 
-        #TODO: парсинг считанной инструкции
-
         self.dataPath.signal_latch_ALU(ARMux.IP)
         self.dataPath.alu_operation(Opcode.INC)
         self.dataPath.signal_latch_IP(IPMux.ALU)
@@ -207,6 +205,6 @@ class ControlUnit:
         # POP
         if cmd.opcode is Opcode.DUP:
             self.dataPath.signal_latch_TOS(TOSMux.DataStack)
-        
+
 
 
