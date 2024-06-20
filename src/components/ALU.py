@@ -1,24 +1,24 @@
 from enum import Enum
+from src.isa import Opcode
 
+ALU_COMMANDS = {
+    "CLA" : lambda x, y: 0,                         # CLA
+    "NEG" : lambda x, y: -x,                        # NEG
+    "INC" : lambda x, y: x + 1,                     # INC
+    "DEC" : lambda x, y: x - 1,                     # DEC
+    "NOT" : lambda x, y: int(~bin(x), 2) - 1,       # NOT
+    "AND" : lambda x, y: int(bin(x) & bin(y), 2),   # AND
+    "OR"  : lambda x, y: int(bin(x) | bin(y), 2),   # OR
+    "ADD" : lambda x, y: x + y,                     # ADD
+    "SUB" : lambda x, y: x - y,                     # SUB
+    "CMP" : lambda x, y: x - y,                     # CMP
+    "MUL" : lambda x, y: x * y,                     # MUL
+    "DIV" : lambda x, y: x / y,                     # DIV
+    "BEQ" : lambda x, y: 1 if x == y else 0,        # BEQ
+    "BGT" : lambda x, y: 1 if x > y else 0,         # BGT
+    "BLT" : lambda x, y: 1 if x < y else 0          # BLT
+}
 
-ALU_COMMANDS = [
-    lambda x, y: 0,                         # CLA
-    lambda x, y: -x,                        # NEG
-    lambda x, y: x + 1,                     # INC
-    lambda x, y: x - 1,                     # DEC
-    lambda x, y: int(~bin(x), 2) - 1,       # NOT
-    lambda x, y: int(bin(x) & bin(y), 2),   # AND
-    lambda x, y: int(bin(x) | bin(y), 2),   # OR
-    lambda x, y: x + y,                     # ADD
-    lambda x, y: x - y,                     # SUB
-    lambda x, y: x - y,                     # CMP
-    lambda x, y: x * y,                     # MUL
-    lambda x, y: x / y,                     # DIV
-    lambda x, y: 1 if x == y else 0,        # BEQ
-    lambda x, y: 1 if x > y else 0,         # BGT
-    lambda x, y: 1 if x < y else 0          # BLT
-
-]
 MAX_NUMBER = 2**31 - 1
 MIN_NUMBER = -(2**31)
 

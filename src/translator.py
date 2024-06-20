@@ -56,6 +56,8 @@ def second_stage(code: list, labels: dict[str, int]):
                     addressing = Addressing.POST_INC
                 elif label.endswith("]-"):
                     addressing = Addressing.POST_DEC
+            elif label.startswith("#"):
+                addressing = Addressing.LOAD
             label = label.strip("#[]+-")
             instruction.addressing = addressing.value
             try:

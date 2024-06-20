@@ -18,7 +18,11 @@ class Stack:
     def pop(self):
         if len(self.stack) == 0:
             return None
-        value = self.stack[-1]
-        self.stack.pop()
+        value = self.stack.pop(-1)
         return value
 
+    def __repr__(self):
+        buff = ""
+        for i in range(len(self.stack)-1, 0, -1):
+            buff += str(self.stack[i]) + " "
+        return buff

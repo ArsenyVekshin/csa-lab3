@@ -52,6 +52,9 @@ class Opcode(str, Enum):
     def __str__(self):
         return str(self.value)
 
+    def index(self):
+        return list(Opcode).index(self.value)
+
 class Addressing(Enum):
     DIRECT_ABS = 0
     DIRECT_SHIFT = 1
@@ -69,12 +72,18 @@ class Instruction:
         self.addressing = addressing
 
     def __repr__(self):
-        return "{} : {} \n\t arg: {} \n\t addressing: {}".format(
+        return "{} : {} \n\t arg: {} \n\t addressing: {}\n".format(
             self.index,
             self.opcode,
             self.arg,
             self.addressing
         )
+    def getArg(self):
+        return int(self.arg)
+    def getShortNote(self):
+        out = self.opcode
+        if self.arg is not None: out += self.arg
+        return out
 
 class CodeEncoder(json.JSONEncoder):
     def default(self, obj):
