@@ -1,0 +1,30 @@
+BEGIN:
+    LD MSG
+    ST PTR
+    LD LEN
+
+LOOP:
+    LD COUNTER
+    INC
+    ST COUNTER
+    BGT END
+    POP
+    LD [PTR]+
+    OUT
+    JUMP LOOP
+END:
+    HLT
+
+LEN:
+    WORD 6
+MSG:
+    WORD 72
+    WORD 101
+    WORD 108
+    WORD 108
+    WORD 111
+    WORD 0
+PTR:
+    WORD 1
+COUNTER:
+    WORD 0

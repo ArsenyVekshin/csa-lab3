@@ -33,6 +33,7 @@ class DataPath:
         self.data_stack.push(self.tos)
 
     def signal_latch_DR(self, signal=None):
+        if signal is None: return
         match signal:
             case DRSig.READ:
                 self.memory.read(self.ar)
@@ -291,6 +292,7 @@ def simulation(code, input_tokens, data_memory, data_memory_size, limit):
 def main(code_file, input_file):
     with open(code_file, encoding="utf-8") as file:
         code = json.loads(file.read())
+        print(code['data'])
         machine_code = MachineCode(list(map(lambda d: Instruction(**d), code["code"])), code["data"])
     with open(input_file, encoding="utf-8") as file:
         input_text = sorted(json.loads(file.read()), reverse=True)

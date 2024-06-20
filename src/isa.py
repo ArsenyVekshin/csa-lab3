@@ -5,48 +5,49 @@ from enum import Enum
 
 class Opcode(str, Enum):
     # math (x)
-    CLA = "cla"     # TOS * 0
-    NEG = "neg"     # TOS * (-1)
-    INC = "inc"     # TOS + 1
-    DEC = "dec"     # TOS - 1
+    CLA = "CLA"     # TOS * 0
+    NEG = "NEG"     # TOS * (-1)
+    INC = "INC"     # TOS + 1
+    DEC = "DEC"     # TOS - 1
 
     # logic
-    NOT = "not"
-    AND = "and"
-    OR = "or"
+    NOT = "NOT"
+    AND = "AND"
+    OR = "OR"
 
     # math (x,y)
-    ADD = "add"     # TOS + X
-    SUB = "sub"     # TOS - X
-    CMP = "cmp"     # TOS - X -> NZV
-    MUL = "mul"     # TOS * X
-    DIV = "div"     # TOS / X
-    SXTB = "sxtb"   # extend 8bit TOS
+    ADD = "ADD"     # TOS + X
+    SUB = "SUB"     # TOS - X
+    CMP = "CMP"     # TOS - X -> NZV
+    MUL = "MUL"     # TOS * X
+    DIV = "DIV"     # TOS / X
+    SXTB = "SXTB"   # extend 8bit TOS
 
     # if (...) -> jmp to arg
-    BEQ = "beq"  # TOS == X
-    BGT = "bgt"  # TOS > X
-    BLT = "blt"  # TOS < X
+    BEQ = "BEQ"  # TOS == X
+    BGT = "BGT"  # TOS > X
+    BLT = "BLT"  # TOS < X
 
     # mem
-    LD = "ld"
-    ST = "st"
+    LD = "LD"
+    ST = "ST"
 
     # stack
-    SWAP = "swap"
-    DUP = "dup"
-    POP = "pop"
+    SWAP = "SWAP"
+    DUP = "DUP"
+    POP = "POP"
 
     # subprograms
-    CALL = "call"
-    JUMP = "jump"
-    RET = "ret"
+    CALL = "CALL"
+    JUMP = "JUMP"
+    RET = "RET"
 
     # IO
-    IN = "in"       # send ready signal to device
-    OUT = "out"     # check ready-status of device
+    IN = "IN"       # send ready signal to device
+    OUT = "OUT"     # check ready-status of device
 
-    HLT = "hlt"
+    HLT = "HLT"
+    NOP = 'NOP'
 
     def __str__(self):
         return str(self.value)
@@ -67,24 +68,16 @@ class Instruction:
         self.arg = arg
         self.addressing = addressing
 
-class MachineCode:
-    def __init__(self, code: list[Instruction], data: list[int]):
-        self.code: list[Instruction] = code
-        self.data: list[int] = data
-
+    def __repr__(self):
+        return "{} : {} \n\t arg: {} \n\t addressing: {}".format(
+            self.index,
+            self.opcode,
+            self.arg,
+            self.addressing
+        )
 
 class CodeEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, Instruction):
             return obj.__dict__
-        return json.JSONEncoder.default(self, obj)
-
-
-class MachineCodeEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, MachineCode):
-            buf = []
-            for code in obj.code:
-                buf.append(code.__dict__)
-            return {"code": buf, "data": obj.data}
         return json.JSONEncoder.default(self, obj)
