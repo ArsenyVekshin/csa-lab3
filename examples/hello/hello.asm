@@ -1,30 +1,40 @@
-BEGIN:
-    LD MSG
-    ST PTR
-    LD LEN
+IOVALUE:
+    WORD 0
 
-LOOP:
-    LD COUNTER
-    INC
-    ST COUNTER
-    BGT END
+BEGIN:
+    LD #MSG
+    ST PTR
     POP
+LOOP:
+    INC
+    LD LEN
+    SWAP
+    BLT     ; прошли заданное количество символов?
+    JUMP END
+    DUP
     LD [PTR]+
+    ST IOVALUE
     OUT
+    POP
+    POP
     JUMP LOOP
 END:
     HLT
 
+PTR:
+    WORD 0
 LEN:
-    WORD 6
+    WORD 11
 MSG:
     WORD 72
     WORD 101
     WORD 108
     WORD 108
     WORD 111
-    WORD 0
-PTR:
-    WORD 1
-COUNTER:
-    WORD 0
+    WORD 32
+    WORD 87
+    WORD 79
+    WORD 82
+    WORD 76
+    WORD 68
+

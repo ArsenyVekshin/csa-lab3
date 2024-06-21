@@ -1,0 +1,134 @@
+[
+    {
+        "index": 0,
+        "opcode": "NOP",
+        "arg": 0,
+        "addressing": 0
+    },
+    {
+        "index": 1,
+        "opcode": "IN",
+        "arg": null,
+        "addressing": 5
+    },
+    {
+        "index": 2,
+        "opcode": "LD",
+        "arg": "0",
+        "addressing": 0
+    },
+    {
+        "index": 3,
+        "opcode": "ST",
+        "arg": "20",
+        "addressing": 0
+    },
+    {
+        "index": 4,
+        "opcode": "POP",
+        "arg": null,
+        "addressing": 5
+    },
+    {
+        "index": 5,
+        "opcode": "LD",
+        "arg": "21",
+        "addressing": 2
+    },
+    {
+        "index": 6,
+        "opcode": "ST",
+        "arg": "19",
+        "addressing": 0
+    },
+    {
+        "index": 7,
+        "opcode": "POP",
+        "arg": null,
+        "addressing": 5
+    },
+    {
+        "index": 8,
+        "opcode": "INC",
+        "arg": null,
+        "addressing": 5
+    },
+    {
+        "index": 9,
+        "opcode": "LD",
+        "arg": "20",
+        "addressing": 0
+    },
+    {
+        "index": 10,
+        "opcode": "SWAP",
+        "arg": null,
+        "addressing": 5
+    },
+    {
+        "index": 11,
+        "opcode": "BLT",
+        "arg": null,
+        "addressing": 5
+    },
+    {
+        "index": 12,
+        "opcode": "JUMP",
+        "arg": "18",
+        "addressing": 0
+    },
+    {
+        "index": 13,
+        "opcode": "IN",
+        "arg": null,
+        "addressing": 5
+    },
+    {
+        "index": 14,
+        "opcode": "LD",
+        "arg": "0",
+        "addressing": 0
+    },
+    {
+        "index": 15,
+        "opcode": "ST",
+        "arg": "19",
+        "addressing": 3
+    },
+    {
+        "index": 16,
+        "opcode": "POP",
+        "arg": null,
+        "addressing": 5
+    },
+    {
+        "index": 17,
+        "opcode": "JUMP",
+        "arg": "8",
+        "addressing": 0
+    },
+    {
+        "index": 18,
+        "opcode": "HLT",
+        "arg": null,
+        "addressing": 5
+    },
+    {
+        "index": 19,
+        "opcode": "NOP",
+        "arg": 0,
+        "addressing": 0
+    },
+    {
+        "index": 20,
+        "opcode": "NOP",
+        "arg": 0,
+        "addressing": 0
+    },
+    {
+        "index": 21,
+        "opcode": "NOP",
+        "arg": 0,
+        "addressing": 0
+    }
+]
