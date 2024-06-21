@@ -90,19 +90,21 @@ class DataPath:
                 assert arg is not None, "Internal error: expected arg for CR -> ALU"
 
     def alu_operation(self, command: Opcode = None):
-        if command is not None and Opcode.AND.index() <= Opcode(command).index() <= Opcode.DIV.index():
-            self.alu.second_value = self.data_stack.pop()
+        if command is not None:
+            if Opcode.AND.index() <= Opcode(command).index() <= Opcode.BLT.index():
+                self.alu.second_value = self.data_stack.pop()
         self.alu.do_operation(command)
 
 
 class IOController:
-    def __init__(self, dataPath, inputBuffer, memAddr, output_file):
+    def __init__(self, dataPath, inputBuffer, memAddr, output_file, output_mode):
         self.iter = 0
         self.dataPath = dataPath
         self.inputBuffer = inputBuffer
         self.outputBuffer = []
         self.memAddr = memAddr
         self.output_file = output_file
+        self.output_mode = output_mode
 
     def __repr__(self):
         return "IN: {} OUT: {}".format(
@@ -129,7 +131,11 @@ class IOController:
         print(self.outputBuffer)
         file = open(self.output_file, "w+", encoding="utf-8")
         for s in self.outputBuffer:
-            file.write(chr(s))
+            if output_mode == "text":
+                file.write(chr(s))
+            else:
+                file.write(str(s))
+                file.write(" ")
         file.close()
 
 class ControlUnit:
@@ -142,7 +148,7 @@ class ControlUnit:
     def __repr__(self):
         # buff = "IP: {:3} ".format(self.dataPath.ip)
         # buff += "CR"
-        return "  IP: {:3} \tCR: {:4} \tAR: {:4} \tDR: {:4} \tBR: {:2} \tSTACK: {}".format(
+        return "  IP: {:4} \tCR: {:4} \tAR: {:4} \tDR: {:4} \tBR: {:4} \tSTACK: {}".format(
             self.dataPath.ip,
             self.cr.getShortNote() if isinstance(self.cr, Instruction) else self.cr,
             self.dataPath.ar,
@@ -290,8 +296,7 @@ class ControlUnit:
         elif cmd.opcode == Opcode.HLT:
             print("Got HLT cmd. Finishing execution...")
             self.ioController.finish()
-            print(self.dataPath.memory)
-            sys.exit(1)
+            raise StopIteration
 
     def execute(self):
         self.instructionFetch()
@@ -300,9 +305,9 @@ class ControlUnit:
         self.executionFetch(cmd)
 
 
-def simulation(code, input_tokens, limit, output_file):
+def simulation(code, input_tokens, limit, output_file, output_mode):
     dataPath = DataPath(code, limit, input_tokens[0])
-    ioController = IOController(dataPath, input_tokens, 0, output_file)
+    ioController = IOController(dataPath, input_tokens, 0, output_file, output_mode)
     controlUnit = ControlUnit(dataPath, ioController)
     instr_counter = 0
 
@@ -313,6 +318,7 @@ def simulation(code, input_tokens, limit, output_file):
             instr_counter += 1
             logging.debug("%s", controlUnit)
     except (StopIteration, EOFError):
+        ioController.finish()
         pass
 
     if instr_counter >= limit:
@@ -320,7 +326,7 @@ def simulation(code, input_tokens, limit, output_file):
     logging.info("output_buffer: %s", repr("".join(controlUnit.ioController.outputBuffer)))
     return "".join(dataPath.output_buffer), instr_counter, dataPath.ip
 
-def main(code_file, input_file, output_file):
+def main(code_file, input_file, output_file, output_mode):
     with open(code_file, encoding="utf-8") as file:
         code = json.loads(file.read())
         machine_code = list(map(lambda d: Instruction(**d), code))
@@ -341,7 +347,7 @@ def main(code_file, input_file, output_file):
 
     print(input_text)
     output, instr_counter, ticks = simulation(
-        machine_code, input_text, INSTRUCTION_LIMIT, output_file
+        machine_code, input_text, INSTRUCTION_LIMIT, output_file, output_mode
     )
 
     print("".join(output))
@@ -349,6 +355,6 @@ def main(code_file, input_file, output_file):
 
 if __name__ == "__main__":
     logging.getLogger().setLevel(logging.DEBUG)
-    assert len(sys.argv) == 4, "Wrong arguments: machine.py <code_file> <input_file> <output_file>"
-    _, code_file, input_file, output_file = sys.argv
-    main(code_file, input_file, output_file)
+    assert len(sys.argv) == 5, "Wrong arguments: machine.py <code_file> <input_file> <output_file> <output_mode>"
+    _, code_file, input_file, output_file, output_mode = sys.argv
+    main(code_file, input_file, output_file, output_mode)
