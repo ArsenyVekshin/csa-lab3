@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class TOSMux(Enum):
     BR = 0
     DR = 1
@@ -7,6 +8,7 @@ class TOSMux(Enum):
     ALU = 3
     DataStack = 4
     CR = 5
+
 
 class ALUMux(Enum):
     TOS = 0
@@ -18,16 +20,14 @@ class IPMux(Enum):
     ALU = 0
     ReturnStack = 1
 
+
 class ARMux(Enum):
     ALU = 0
     CR = 1
     IP = 2
 
 
-
 class DRSig(Enum):
     READ = 0
     WRITE = 1
-    NewValue = 2
-
-
+    ALU = 2

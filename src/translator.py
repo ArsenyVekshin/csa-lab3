@@ -3,16 +3,13 @@ from __future__ import annotations
 import json
 import sys
 
-from src.isa import Addressing, Instruction,  CodeEncoder, Opcode
+from src.isa import Addressing, CodeEncoder, Instruction, Opcode
 
 
-# flake8: noqa: C901
 def translate(text: str):
-    code = []#: list[Instruction] = [Instruction(0, Opcode.NOP), Instruction(1, Opcode.NOP)]
-    data: list[int] = []
+    code = []
     labels: dict[str, int] = {}
     prog_position: int = 0
-    last_label: str = ""
 
     for line in text.splitlines():
         token = line.split(";", 1)[0].strip()
@@ -23,7 +20,6 @@ def translate(text: str):
             label = token.strip(":")
             assert label not in labels, "Redefinition of label: {}".format(label)
             labels[label] = prog_position
-            last_label = label
 
         elif " " in token:
             sub_tokens = token.split(" ")
@@ -42,10 +38,10 @@ def translate(text: str):
     return second_stage(code, labels)
 
 
-# flake8: noqa: C901
 def second_stage(code: list, labels: dict[str, int]):
     for instruction in code:
-        if instruction.opcode is Opcode.NOP: continue
+        if instruction.opcode is Opcode.NOP:
+            continue
         if instruction.arg is not None:
             label = instruction.arg
             addressing = Addressing.DIRECT_ABS
@@ -68,7 +64,6 @@ def second_stage(code: list, labels: dict[str, int]):
             assert label in labels, "Label not defined: {}".format(label)
             instruction.arg = str(labels[label])
     return code
-
 
 
 def parse_number(label: str) -> int:

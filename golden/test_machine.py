@@ -4,12 +4,13 @@ import re
 import tempfile
 
 import pytest
-
-import src.translator as translator
 import src.machine as machine
+import src.translator as translator
+
 
 def replace_multiple_spaces_with_one(s):
     return re.sub(r"\s+", " ", s)
+
 
 @pytest.mark.golden_test("golden/*.yml")
 def test_bar(golden, caplog):
@@ -27,9 +28,7 @@ def test_bar(golden, caplog):
         with open(source_file, "w", encoding="utf-8") as file:
             file.write(golden["in_source"])
 
-
         translator.main(source_file, target_file)
-
 
         machine.main(target_file, input_file, output_file, golden["output_mode"])
 
@@ -38,6 +37,6 @@ def test_bar(golden, caplog):
 
         assert human_readable.rstrip("\n") == golden.out["out_code"].rstrip("\n")
         open("file_log.txt", "w").write(caplog.text)
-        expected = replace_multiple_spaces_with_one(caplog.text.rstrip("\n").replace("\t","   "))
-        result = replace_multiple_spaces_with_one(golden.out["out_log"].rstrip("\n").replace("\t","    "))
+        expected = replace_multiple_spaces_with_one(caplog.text.rstrip("\n").replace("\t", "   "))
+        result = replace_multiple_spaces_with_one(golden.out["out_log"].rstrip("\n").replace("\t", "    "))
         assert expected == result

@@ -1,5 +1,3 @@
-from enum import Enum
-from src.isa import Opcode
 
 ALU_COMMANDS = {
     "CLA" : lambda x, y: 0,                         # CLA

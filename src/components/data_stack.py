@@ -18,8 +18,7 @@ class Stack:
     def pop(self):
         if len(self.stack) == 0:
             return None
-        value = self.stack.pop(-1)
-        return value
+        return self.stack.pop(-1)
 
     def __repr__(self):
         buff = ""

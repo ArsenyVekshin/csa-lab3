@@ -3,25 +3,26 @@ from __future__ import annotations
 import json
 from enum import Enum
 
+
 class Opcode(str, Enum):
-    # math (x)
-    CLA = "CLA"     # TOS * 0
-    NEG = "NEG"     # TOS * (-1)
-    INC = "INC"     # TOS + 1
-    DEC = "DEC"     # TOS - 1
+    # math with 1 argument
+    CLA = "CLA"  # TOS * 0
+    NEG = "NEG"  # TOS * (-1)
+    INC = "INC"  # TOS + 1
+    DEC = "DEC"  # TOS - 1
 
     # logic
     NOT = "NOT"
     AND = "AND"
     OR = "OR"
 
-    # math (x,y)
-    ADD = "ADD"     # TOS + X
-    SUB = "SUB"     # TOS - X
-    CMP = "CMP"     # TOS - X -> NZV
-    MUL = "MUL"     # TOS * X
-    DIV = "DIV"     # TOS / X
-    SXTB = "SXTB"   # extend 8bit TOS
+    # math with 2 arguments
+    ADD = "ADD"  # TOS + X
+    SUB = "SUB"  # TOS - X
+    CMP = "CMP"  # TOS - X -> NZV
+    MUL = "MUL"  # TOS * X
+    DIV = "DIV"  # TOS / X
+    SXTB = "SXTB"  # extend 8bit TOS
 
     # if (...) -> jmp to arg
     BEQ = "BEQ"  # TOS == X
@@ -43,17 +44,18 @@ class Opcode(str, Enum):
     RET = "RET"
 
     # IO
-    IN = "IN"       # send ready signal to device
-    OUT = "OUT"     # check ready-status of device
+    IN = "IN"  # send ready signal to device
+    OUT = "OUT"  # check ready-status of device
 
     HLT = "HLT"
-    NOP = 'NOP'
+    NOP = "NOP"
 
     def __str__(self):
         return str(self.value)
 
     def index(self):
         return list(Opcode).index(self.value)
+
 
 class Addressing(Enum):
     DIRECT_ABS = 0
@@ -78,12 +80,16 @@ class Instruction:
             self.arg,
             self.addressing
         )
-    def getArg(self):
+
+    def get_arg(self):
         return int(self.arg)
-    def getShortNote(self):
+
+    def get_short_note(self):
         out = self.opcode
-        if self.arg is not None: out += self.arg
+        if self.arg is not None:
+            out += self.arg
         return out
+
 
 class CodeEncoder(json.JSONEncoder):
     def default(self, obj):
