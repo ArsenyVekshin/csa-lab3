@@ -49,55 +49,55 @@
     },
     {
         "index": 8,
-        "opcode": "INC",
-        "arg": null,
-        "addressing": 5
-    },
-    {
-        "index": 9,
         "opcode": "LD",
         "arg": "20",
         "addressing": 0
     },
     {
-        "index": 10,
+        "index": 9,
         "opcode": "SWAP",
         "arg": null,
         "addressing": 5
     },
     {
-        "index": 11,
+        "index": 10,
         "opcode": "BLT",
         "arg": null,
         "addressing": 5
     },
     {
-        "index": 12,
+        "index": 11,
         "opcode": "JUMP",
         "arg": "18",
         "addressing": 0
     },
     {
-        "index": 13,
+        "index": 12,
         "opcode": "IN",
         "arg": null,
         "addressing": 5
     },
     {
-        "index": 14,
+        "index": 13,
         "opcode": "LD",
         "arg": "0",
         "addressing": 0
     },
     {
-        "index": 15,
+        "index": 14,
         "opcode": "ST",
         "arg": "19",
         "addressing": 3
     },
     {
-        "index": 16,
+        "index": 15,
         "opcode": "POP",
+        "arg": null,
+        "addressing": 5
+    },
+    {
+        "index": 16,
+        "opcode": "INC",
         "arg": null,
         "addressing": 5
     },
