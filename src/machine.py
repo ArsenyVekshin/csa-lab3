@@ -128,7 +128,6 @@ class IOController:
         self.outputBuffer.append(self.dataPath.memory.value)
         # print("OUT: ", self.outputBuffer)
     def finish(self):
-        print(self.outputBuffer)
         file = open(self.output_file, "w+", encoding="utf-8")
         for s in self.outputBuffer:
             if output_mode == "text":
@@ -144,11 +143,16 @@ class ControlUnit:
         self.ioController = ioController
         self.return_stack = Stack(STACK_SIZE)
         self.cr = 0
+        self._tick = 0
+
+    def tick(self):
+        self._tick += 1
 
     def __repr__(self):
         # buff = "IP: {:3} ".format(self.dataPath.ip)
         # buff += "CR"
-        return "  IP: {:4} \tCR: {:4} \tAR: {:4} \tDR: {:4} \tBR: {:4} \tSTACK: {}".format(
+        return "  TICK: {:4} \tIP: {:4} \tCR: {:4} \tAR: {:4} \tDR: {:4} \tBR: {:4} \tSTACK: {}".format(
+            self._tick,
             self.dataPath.ip,
             self.cr.getShortNote() if isinstance(self.cr, Instruction) else self.cr,
             self.dataPath.ar,
@@ -160,15 +164,19 @@ class ControlUnit:
 
     def instructionFetch(self):
         self.dataPath.signal_latch_AR(ARMux.IP)
+        self.tick()
         self.dataPath.signal_latch_DR(DRSig.READ)
         self.cr = self.dataPath.dr
+        self.tick()
 
         if not isinstance(self.cr, Instruction):
             raise WrongInstructionFormat(self.cr, self.dataPath.ip)
 
         self.dataPath.signal_latch_ALU(ALUMux.IP)
+        self.tick()
         self.dataPath.alu_operation(Opcode.INC)
         self.dataPath.signal_latch_IP(IPMux.ALU)
+        self.tick()
 
 
     def addressFetch(self, cmd: Instruction):
@@ -177,61 +185,81 @@ class ControlUnit:
         if cmd.addressing == Addressing.DIRECT_ABS.value:
             # save current tos to DataStack
             self.dataPath.dataStack_push()
+            self.tick()
+
             self.dataPath.signal_latch_ALU(ALUMux.CR, cmd.getArg())
             self.dataPath.alu_operation(None)
             self.dataPath.signal_latch_DR(DRSig.NewValue)
+            self.tick()
 
             self.dataPath.signal_latch_TOS(TOSMux.DataStack)
+            self.tick()
 
         elif cmd.addressing == Addressing.LOAD.value:
             self.dataPath.signal_latch_ALU(ALUMux.CR, cmd.getArg())
             self.dataPath.alu_operation(None)
             self.dataPath.signal_latch_DR(DRSig.NewValue)
+            self.tick()
             return
         elif cmd.addressing == Addressing.DIRECT_SHIFT.value:
             # save current tos to DataStack
             self.dataPath.dataStack_push()
+            self.tick()
 
             # load current IP to DataStack
             self.dataPath.signal_latch_TOS(TOSMux.IP)
+            self.tick()
             self.dataPath.dataStack_push()
+            self.tick()
 
             # load shift value to TOS
             self.dataPath.signal_latch_TOS(TOSMux.CR, cmd.getArg())
+            self.tick()
 
             # we got targeted addr
             self.dataPath.alu_operation(Opcode.ADD)
+            self.tick()
 
         elif cmd.addressing in {Addressing.POST_INC.value, Addressing.POST_DEC.value}:
             # save current TOS to DataStack
             self.dataPath.dataStack_push()
+            self.tick()
 
             # read value from addr container
             self.dataPath.signal_latch_AR(ARMux.CR, cmd.getArg())
+            self.tick()
             self.dataPath.signal_latch_DR(DRSig.READ)
+            self.tick()
             self.dataPath.signal_latch_TOS(TOSMux.DR)
+            self.tick()
 
             # inc/dec addr container
             self.dataPath.signal_latch_ALU(ALUMux.TOS)
+            self.tick()
             if cmd.addressing == Addressing.POST_INC.value:
                 self.dataPath.alu_operation(Opcode.INC)
             else:
                 self.dataPath.alu_operation(Opcode.DEC)
+            self.tick()
             self.dataPath.signal_latch_DR(DRSig.NewValue)
+            self.tick()
             self.dataPath.signal_latch_DR(DRSig.WRITE)
+            self.tick()
 
             # read value from selected addr by container
             self.dataPath.signal_latch_ALU(ALUMux.TOS)
             self.dataPath.alu_operation(None)
-
             # return tos prev value
             self.dataPath.signal_latch_TOS(TOSMux.DataStack)
+            self.tick()
         self.operandFetch()
 
 
     def operandFetch(self):
         self.dataPath.signal_latch_AR(ARMux.ALU)
+        self.tick()
         self.dataPath.signal_latch_DR(DRSig.READ)
+        self.tick()
 
     def executionFetch(self, cmd: Instruction):
 
@@ -243,15 +271,18 @@ class ControlUnit:
             # extra actions for if
             if Opcode(cmd.opcode).index() >= Opcode.BEQ.index():
                 if self.dataPath.alu.value == 1: # inc ip
+                    self.tick() # tick for read argument from stack
                     self.dataPath.signal_latch_ALU(ALUMux.IP)
                     self.dataPath.alu_operation(Opcode.INC)
                     self.dataPath.signal_latch_IP(IPMux.ALU)
             else:
                 self.dataPath.signal_latch_TOS(TOSMux.ALU)
+            self.tick()
 
         # LD
         elif cmd.opcode == Opcode.LD:
             self.dataPath.dataStack_push() # TOS -> stack
+            self.tick()
             self.dataPath.signal_latch_TOS(TOSMux.DR)
 
         # ST
@@ -259,12 +290,14 @@ class ControlUnit:
             self.dataPath.signal_latch_ALU(ALUMux.TOS)
             self.dataPath.alu_operation(None)
             self.dataPath.signal_latch_DR(DRSig.NewValue)
+            self.tick()
             self.dataPath.signal_latch_DR(DRSig.WRITE)
 
         # JMP + CALL
         elif cmd.opcode in {Opcode.JUMP, Opcode.CALL}:
             if cmd.opcode is Opcode.CALL:
                 self.return_stack.push(self.dataPath.ip)
+                self.tick()
 
             self.dataPath.signal_latch_IP(IPMux.ALU)
 
@@ -275,7 +308,9 @@ class ControlUnit:
         # SWAP
         elif cmd.opcode == Opcode.SWAP:
             self.dataPath.signal_latch_BR()
+            self.tick()
             self.dataPath.dataStack_push()
+            self.tick()
             self.dataPath.signal_latch_TOS(TOSMux.BR)
 
         # DUP
@@ -294,9 +329,8 @@ class ControlUnit:
             self.ioController.send()
 
         elif cmd.opcode == Opcode.HLT:
-            print("Got HLT cmd. Finishing execution...")
-            self.ioController.finish()
             raise StopIteration
+        self.tick()
 
     def execute(self):
         self.instructionFetch()
@@ -319,12 +353,13 @@ def simulation(code, input_tokens, limit, output_file, output_mode):
             logging.debug("%s", controlUnit)
     except (StopIteration, EOFError):
         ioController.finish()
+        # print("Memory dump:")
+        # print(dataPath.memory)
         pass
 
     if instr_counter >= limit:
         logging.warning("Limit exceeded!")
-    logging.info("output_buffer: %s", repr("".join(controlUnit.ioController.outputBuffer)))
-    return "".join(dataPath.output_buffer), instr_counter, dataPath.ip
+    return instr_counter, controlUnit._tick
 
 def main(code_file, input_file, output_file, output_mode):
     with open(code_file, encoding="utf-8") as file:
@@ -345,13 +380,10 @@ def main(code_file, input_file, output_file, output_mode):
             input_text += list(buff)
     input_text = [len(input_text)] + input_text
 
-    print(input_text)
-    output, instr_counter, ticks = simulation(
+    instr_counter, ticks = simulation(
         machine_code, input_text, INSTRUCTION_LIMIT, output_file, output_mode
     )
-
-    print("".join(output))
-
+    print("instructions_executed: {} ticks: {}".format(instr_counter, ticks))
 
 if __name__ == "__main__":
     logging.getLogger().setLevel(logging.DEBUG)

@@ -22,7 +22,7 @@ class Memory:
         out = ""
         for i in range(len(self.memory)):
             buff = ""
-            if type(self.memory[i]) is int: buff = "{:2} <-> \'{}\'".format(self.memory[i], chr(self.memory[i]))
+            if type(self.memory[i]) is int: buff = str(self.memory[i])
             else: buff = self.memory[i].getShortNote()
             out += "{:4} : \t {}\n".format(i, buff)
         return out
