@@ -1,3 +1,5 @@
+from src.isa import Instruction
+
 class Memory:
     memory = None
     start_of_variables = None
@@ -20,7 +22,7 @@ class Memory:
         out = ""
         for i in range(len(self.memory)):
             buff = ""
-            if isinstance(self.memory[i], int): buff = str(self.memory[i])
-            else: buff = self.memory[i].get_short_note()
+            if type(self.memory[i]) is int: buff = str(self.memory[i])
+            else: buff = self.memory[i].getShortNote()
             out += "{:4} : \t {}\n".format(i, buff)
         return out

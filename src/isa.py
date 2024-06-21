@@ -80,7 +80,7 @@ class Instruction:
         )
     def getArg(self):
         return int(self.arg)
-    def get_short_note(self):
+    def getShortNote(self):
         out = self.opcode
         if self.arg is not None: out += self.arg
         return out

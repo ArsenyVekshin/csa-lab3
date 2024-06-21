@@ -12,7 +12,7 @@ STACK_SIZE = 64
 SIZE_FOR_VARS = 150
 INSTRUCTION_LIMIT = 100000
 
-class WrongInstructionFormatError(Exception):
+class WrongInstructionFormat(Exception):
     def __init__(self, instr, ip):
         super().__init__(f"Error: unable to parse instruction {instr} at ip = {ip} - wrong format")
 
@@ -27,10 +27,10 @@ class DataPath:
         self.dr = 0
         self.br = 0
 
-    def data_stack_push(self):
+    def dataStack_push(self):
         self.data_stack.push(self.tos)
 
-    def signal_latch_dr(self, signal=None):
+    def signal_latch_DR(self, signal=None):
         if signal is None: return
         match signal:
             case DRSig.READ:
@@ -42,7 +42,7 @@ class DataPath:
             case DRSig.NewValue:
                 self.dr = self.alu.value
 
-    def signal_latch_tos(self, signal=None, arg = None):
+    def signal_latch_TOS(self, signal=None, arg = None):
         match signal:
             case TOSMux.BR:
                 self.tos = self.br
@@ -58,7 +58,7 @@ class DataPath:
                 self.tos = arg
                 assert arg is not None, "Internal error: expected arg for CR -> TOS"
 
-    def signal_latch_ip(self, signal=None, arg = None):
+    def signal_latch_IP(self, signal=None, arg = None):
         match signal:
             case IPMux.ALU:
                 self.ip = self.alu.value
@@ -66,7 +66,7 @@ class DataPath:
                 self.ip = arg
                 assert arg is not None, "Internal error: expected arg for RS -> IP"
 
-    def signal_latch_ar(self, signal=None, arg = None):
+    def signal_latch_AR(self, signal=None, arg = None):
         match signal:
             case ARMux.IP:
                 self.ar = self.ip
@@ -76,10 +76,10 @@ class DataPath:
                 self.ar = arg
                 assert arg is not None, "Internal error: expected arg for CR -> AR"
 
-    def signal_latch_br(self, signal=None):
+    def signal_latch_BR(self, signal=None):
         self.br = self.data_stack.pop()
 
-    def signal_latch_alu(self, signal=None, arg = None):
+    def signal_latch_ALU(self, signal=None, arg = None):
         match signal:
             case ALUMux.TOS:
                 self.alu.first_value = self.tos
@@ -97,39 +97,39 @@ class DataPath:
 
 
 class IOController:
-    def __init__(self, data_path, input_buffer, mem_addr, output_file, output_mode):
+    def __init__(self, dataPath, inputBuffer, memAddr, output_file, output_mode):
         self.iter = 0
-        self.data_path = data_path
-        self.input_buffer = input_buffer
-        self.output_buffer = []
-        self.mem_addr = mem_addr
+        self.dataPath = dataPath
+        self.inputBuffer = inputBuffer
+        self.outputBuffer = []
+        self.memAddr = memAddr
         self.output_file = output_file
         self.output_mode = output_mode
 
     def __repr__(self):
         return "IN: {} OUT: {}".format(
-            self.input_buffer,
-            self.output_buffer
+            self.inputBuffer,
+            self.outputBuffer
         )
 
     def get(self):
-        assert self.iter < len(self.input_buffer),(
-            "Internal error: not enough symbols at buffer to read {} >= {}".format(self.iter, len(self.input_buffer)))
+        assert self.iter < len(self.inputBuffer),(
+            "Internal error: not enough symbols at buffer to read {} >= {}".format(self.iter, len(self.inputBuffer)))
 
-        if type(self.input_buffer[self.iter]) is not int:
-            self.data_path.memory.value = ord(self.input_buffer[self.iter])
+        if type(self.inputBuffer[self.iter]) is not int:
+            self.dataPath.memory.value = ord(self.inputBuffer[self.iter])
         else:
-            self.data_path.memory.value = self.input_buffer[self.iter]
-        self.data_path.memory.write(self.mem_addr)
+            self.dataPath.memory.value = self.inputBuffer[self.iter]
+        self.dataPath.memory.write(self.memAddr)
         self.iter += 1
 
     def send(self):
-        self.data_path.memory.read(self.mem_addr)
-        self.output_buffer.append(self.data_path.memory.value)
-        # print("OUT: ", self.output_buffer)
+        self.dataPath.memory.read(self.memAddr)
+        self.outputBuffer.append(self.dataPath.memory.value)
+        # print("OUT: ", self.outputBuffer)
     def finish(self):
         file = open(self.output_file, "w+", encoding="utf-8")
-        for s in self.output_buffer:
+        for s in self.outputBuffer:
             if self.output_mode == "text":
                 file.write(chr(s))
             else:
@@ -138,9 +138,9 @@ class IOController:
         file.close()
 
 class ControlUnit:
-    def __init__(self, data_path: DataPath, io_controller:IOController):
-        self.data_path = data_path
-        self.ioController = io_controller
+    def __init__(self, dataPath: DataPath, ioController:IOController):
+        self.dataPath = dataPath
+        self.ioController = ioController
         self.return_stack = Stack(STACK_SIZE)
         self.cr = 0
         self._tick = 0
@@ -149,33 +149,33 @@ class ControlUnit:
         self._tick += 1
 
     def __repr__(self):
-        # buff = "IP: {:3} ".format(self.data_path.ip)
+        # buff = "IP: {:3} ".format(self.dataPath.ip)
         # buff += "CR"
         return "  TICK: {:4} \tIP: {:4} \tCR: {:4} \tAR: {:4} \tDR: {:4} \tBR: {:4} \tSTACK: {}".format(
             self._tick,
-            self.data_path.ip,
-            self.cr.get_short_note() if isinstance(self.cr, Instruction) else self.cr,
-            self.data_path.ar,
-            self.data_path.dr.get_short_note() if isinstance(self.data_path.dr, Instruction) else self.data_path.dr,
-            self.data_path.br,
-            "[" + str(self.data_path.tos) + " " + str(self.data_path.data_stack) + "]",
+            self.dataPath.ip,
+            self.cr.getShortNote() if isinstance(self.cr, Instruction) else self.cr,
+            self.dataPath.ar,
+            self.dataPath.dr.getShortNote() if isinstance(self.dataPath.dr, Instruction) else self.dataPath.dr,
+            self.dataPath.br,
+            "[" + str(self.dataPath.tos) + " " + str(self.dataPath.data_stack) + "]",
         )
 
 
     def instructionFetch(self):
-        self.data_path.signal_latch_br(ARMux.IP)
+        self.dataPath.signal_latch_AR(ARMux.IP)
         self.tick()
-        self.data_path.signal_latch_dr(DRSig.READ)
-        self.cr = self.data_path.dr
+        self.dataPath.signal_latch_DR(DRSig.READ)
+        self.cr = self.dataPath.dr
         self.tick()
 
         if not isinstance(self.cr, Instruction):
-            raise WrongInstructionFormatError(self.cr, self.data_path.ip)
+            raise WrongInstructionFormat(self.cr, self.dataPath.ip)
 
-        self.data_path.signal_latch_alu(ALUMux.IP)
+        self.dataPath.signal_latch_ALU(ALUMux.IP)
         self.tick()
-        self.data_path.alu_operation(Opcode.INC)
-        self.data_path.signal_latch_ip(IPMux.ALU)
+        self.dataPath.alu_operation(Opcode.INC)
+        self.dataPath.signal_latch_IP(IPMux.ALU)
         self.tick()
 
 
@@ -184,142 +184,142 @@ class ControlUnit:
 
         if cmd.addressing == Addressing.DIRECT_ABS.value:
             # save current tos to DataStack
-            self.data_path.data_stack_push()
+            self.dataPath.dataStack_push()
             self.tick()
 
-            self.data_path.signal_latch_alu(ALUMux.CR, cmd.getArg())
-            self.data_path.alu_operation(None)
-            self.data_path.signal_latch_dr(DRSig.NewValue)
+            self.dataPath.signal_latch_ALU(ALUMux.CR, cmd.getArg())
+            self.dataPath.alu_operation(None)
+            self.dataPath.signal_latch_DR(DRSig.NewValue)
             self.tick()
 
-            self.data_path.signal_latch_tos(TOSMux.DataStack)
+            self.dataPath.signal_latch_TOS(TOSMux.DataStack)
             self.tick()
 
         elif cmd.addressing == Addressing.LOAD.value:
-            self.data_path.signal_latch_alu(ALUMux.CR, cmd.getArg())
-            self.data_path.alu_operation(None)
-            self.data_path.signal_latch_dr(DRSig.NewValue)
+            self.dataPath.signal_latch_ALU(ALUMux.CR, cmd.getArg())
+            self.dataPath.alu_operation(None)
+            self.dataPath.signal_latch_DR(DRSig.NewValue)
             self.tick()
             return
         elif cmd.addressing == Addressing.DIRECT_SHIFT.value:
             # save current tos to DataStack
-            self.data_path.data_stack_push()
+            self.dataPath.dataStack_push()
             self.tick()
 
             # load current IP to DataStack
-            self.data_path.signal_latch_tos(TOSMux.IP)
+            self.dataPath.signal_latch_TOS(TOSMux.IP)
             self.tick()
-            self.data_path.data_stack_push()
+            self.dataPath.dataStack_push()
             self.tick()
 
             # load shift value to TOS
-            self.data_path.signal_latch_tos(TOSMux.CR, cmd.getArg())
+            self.dataPath.signal_latch_TOS(TOSMux.CR, cmd.getArg())
             self.tick()
 
             # we got targeted addr
-            self.data_path.alu_operation(Opcode.ADD)
+            self.dataPath.alu_operation(Opcode.ADD)
             self.tick()
 
         elif cmd.addressing in {Addressing.POST_INC.value, Addressing.POST_DEC.value}:
             # save current TOS to DataStack
-            self.data_path.data_stack_push()
+            self.dataPath.dataStack_push()
             self.tick()
 
             # read value from addr container
-            self.data_path.signal_latch_ar(ARMux.CR, cmd.getArg())
+            self.dataPath.signal_latch_AR(ARMux.CR, cmd.getArg())
             self.tick()
-            self.data_path.signal_latch_dr(DRSig.READ)
+            self.dataPath.signal_latch_DR(DRSig.READ)
             self.tick()
-            self.data_path.signal_latch_tos(TOSMux.DR)
+            self.dataPath.signal_latch_TOS(TOSMux.DR)
             self.tick()
 
             # inc/dec addr container
-            self.data_path.signal_latch_alu(ALUMux.TOS)
+            self.dataPath.signal_latch_ALU(ALUMux.TOS)
             self.tick()
             if cmd.addressing == Addressing.POST_INC.value:
-                self.data_path.alu_operation(Opcode.INC)
+                self.dataPath.alu_operation(Opcode.INC)
             else:
-                self.data_path.alu_operation(Opcode.DEC)
+                self.dataPath.alu_operation(Opcode.DEC)
             self.tick()
-            self.data_path.signal_latch_dr(DRSig.NewValue)
+            self.dataPath.signal_latch_DR(DRSig.NewValue)
             self.tick()
-            self.data_path.signal_latch_dr(DRSig.WRITE)
+            self.dataPath.signal_latch_DR(DRSig.WRITE)
             self.tick()
 
             # read value from selected addr by container
-            self.data_path.signal_latch_alu(ALUMux.TOS)
-            self.data_path.alu_operation(None)
+            self.dataPath.signal_latch_ALU(ALUMux.TOS)
+            self.dataPath.alu_operation(None)
             # return tos prev value
-            self.data_path.signal_latch_tos(TOSMux.DataStack)
+            self.dataPath.signal_latch_TOS(TOSMux.DataStack)
             self.tick()
         self.operandFetch()
 
 
     def operandFetch(self):
-        self.data_path.signal_latch_ar(ARMux.ALU)
+        self.dataPath.signal_latch_AR(ARMux.ALU)
         self.tick()
-        self.data_path.signal_latch_dr(DRSig.READ)
+        self.dataPath.signal_latch_DR(DRSig.READ)
         self.tick()
 
     def executionFetch(self, cmd: Instruction):
 
         # math \ logic \ if instructions
         if Opcode(cmd.opcode).index() <= Opcode.BLT.index():
-            self.data_path.signal_latch_alu(ALUMux.TOS)
-            self.data_path.alu_operation(cmd.opcode)
+            self.dataPath.signal_latch_ALU(ALUMux.TOS)
+            self.dataPath.alu_operation(cmd.opcode)
 
             # extra actions for if
             if Opcode(cmd.opcode).index() >= Opcode.BEQ.index():
-                if self.data_path.alu.value == 1: # inc ip
+                if self.dataPath.alu.value == 1: # inc ip
                     self.tick() # tick for read argument from stack
-                    self.data_path.signal_latch_alu(ALUMux.IP)
-                    self.data_path.alu_operation(Opcode.INC)
-                    self.data_path.signal_latch_ip(IPMux.ALU)
+                    self.dataPath.signal_latch_ALU(ALUMux.IP)
+                    self.dataPath.alu_operation(Opcode.INC)
+                    self.dataPath.signal_latch_IP(IPMux.ALU)
             else:
-                self.data_path.signal_latch_tos(TOSMux.ALU)
+                self.dataPath.signal_latch_TOS(TOSMux.ALU)
             self.tick()
 
         # LD
         elif cmd.opcode == Opcode.LD:
-            self.data_path.data_stack_push() # TOS -> stack
+            self.dataPath.dataStack_push() # TOS -> stack
             self.tick()
-            self.data_path.signal_latch_tos(TOSMux.DR)
+            self.dataPath.signal_latch_TOS(TOSMux.DR)
 
         # ST
         elif cmd.opcode == Opcode.ST:
-            self.data_path.signal_latch_alu(ALUMux.TOS)
-            self.data_path.alu_operation(None)
-            self.data_path.signal_latch_dr(DRSig.NewValue)
+            self.dataPath.signal_latch_ALU(ALUMux.TOS)
+            self.dataPath.alu_operation(None)
+            self.dataPath.signal_latch_DR(DRSig.NewValue)
             self.tick()
-            self.data_path.signal_latch_dr(DRSig.WRITE)
+            self.dataPath.signal_latch_DR(DRSig.WRITE)
 
         # JMP + CALL
         elif cmd.opcode in {Opcode.JUMP, Opcode.CALL}:
             if cmd.opcode is Opcode.CALL:
-                self.return_stack.push(self.data_path.ip)
+                self.return_stack.push(self.dataPath.ip)
                 self.tick()
 
-            self.data_path.signal_latch_ip(IPMux.ALU)
+            self.dataPath.signal_latch_IP(IPMux.ALU)
 
         # RET
         elif cmd.opcode == Opcode.RET:
-            self.data_path.signal_latch_ip(IPMux.ReturnStack, self.return_stack.pop())
+            self.dataPath.signal_latch_IP(IPMux.ReturnStack, self.return_stack.pop())
 
         # SWAP
         elif cmd.opcode == Opcode.SWAP:
-            self.data_path.signal_latch_br()
+            self.dataPath.signal_latch_BR()
             self.tick()
-            self.data_path.data_stack_push()
+            self.dataPath.dataStack_push()
             self.tick()
-            self.data_path.signal_latch_tos(TOSMux.BR)
+            self.dataPath.signal_latch_TOS(TOSMux.BR)
 
         # DUP
         elif cmd.opcode == Opcode.DUP:
-            self.data_path.data_stack_push()
+            self.dataPath.dataStack_push()
 
         # POP
         elif cmd.opcode == Opcode.POP:
-            self.data_path.signal_latch_tos(TOSMux.DataStack)
+            self.dataPath.signal_latch_TOS(TOSMux.DataStack)
 
         # IN
         elif cmd.opcode == Opcode.IN:
@@ -340,26 +340,26 @@ class ControlUnit:
 
 
 def simulation(code, input_tokens, limit, output_file, output_mode):
-    data_path = DataPath(code, limit, input_tokens[0])
-    io_controller = IOController(data_path, input_tokens, 0, output_file, output_mode)
-    control_unit = ControlUnit(data_path, io_controller)
+    dataPath = DataPath(code, limit, input_tokens[0])
+    ioController = IOController(dataPath, input_tokens, 0, output_file, output_mode)
+    controlUnit = ControlUnit(dataPath, ioController)
     instr_counter = 0
 
-    logging.debug("%s", control_unit)
+    logging.debug("%s", controlUnit)
     try:
         while instr_counter < limit:
-            control_unit.execute()
+            controlUnit.execute()
             instr_counter += 1
-            logging.debug("%s", control_unit)
+            logging.debug("%s", controlUnit)
     except (StopIteration, EOFError):
-        io_controller.finish()
+        ioController.finish()
         # print("Memory dump:")
-        # print(data_path.memory)
+        # print(dataPath.memory)
         pass
 
     if instr_counter >= limit:
         logging.warning("Limit exceeded!")
-    return instr_counter, control_unit._tick
+    return instr_counter, controlUnit._tick
 
 def main(code_file, input_file, output_file, output_mode):
     with open(code_file, encoding="utf-8") as file:

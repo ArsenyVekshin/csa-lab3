@@ -23,6 +23,8 @@ class ARMux(Enum):
     CR = 1
     IP = 2
 
+
+
 class DRSig(Enum):
     READ = 0
     WRITE = 1
