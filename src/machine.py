@@ -90,7 +90,7 @@ class DataPath:
                 assert arg is not None, "Internal error: expected arg for CR -> ALU"
 
     def alu_operation(self, command: Opcode = None):
-        if command is not None and Opcode.ADD <= command <= Opcode.DIV:
+        if command is not None and Opcode.AND.index() <= Opcode(command).index() <= Opcode.DIV.index():
             self.alu.second_value = self.data_stack.pop()
         self.alu.do_operation(command)
 
@@ -332,8 +332,12 @@ def main(code_file, input_file, output_file):
 
     input_text = []
     with open(input_file, encoding="utf-8") as file:
-        input_text += list(file.readline())
-    input_text = [len(input_text)-1] + input_text
+        buff = file.readline()
+        if buff.startswith('['):
+            input_text += eval(buff)
+        else:
+            input_text += list(buff)
+    input_text = [len(input_text)] + input_text
 
     print(input_text)
     output, instr_counter, ticks = simulation(

@@ -15,8 +15,8 @@ ALU_COMMANDS = {
     "MUL" : lambda x, y: x * y,                     # MUL
     "DIV" : lambda x, y: x / y,                     # DIV
     "BEQ" : lambda x, y: 1 if x == y else 0,        # BEQ
-    "BGT" : lambda x, y: 1 if x > y else 0,         # BGT
-    "BLT" : lambda x, y: 1 if x < y else 0          # BLT
+    "BGT" : lambda x, y: 1 if x >= y else 0,         # BGT
+    "BLT" : lambda x, y: 1 if x <= y else 0          # BLT
 }
 
 MAX_NUMBER = 2**31 - 1
