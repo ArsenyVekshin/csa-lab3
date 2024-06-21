@@ -2,11 +2,11 @@ import sys
 import json
 import logging
 
-from components.ALU import ALU
-from components.DataStack import Stack
-from components.Memory import Memory
-from components.Signals import TOSMux, ALUMux, DRSig, IPMux, ARMux
-from isa import Opcode, Instruction, Addressing
+from src.components.ALU import ALU
+from src.components.DataStack import Stack
+from src.components.Memory import Memory
+from src.components.Signals import TOSMux, ALUMux, DRSig, IPMux, ARMux
+from src.isa import Opcode, Instruction, Addressing
 
 STACK_SIZE = 64
 SIZE_FOR_VARS = 150

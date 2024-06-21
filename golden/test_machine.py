@@ -29,19 +29,19 @@ def test_bar(golden, caplog):
 
 
         translator.main(source_file, target_file)
-        print("=" * 5)
-        print("target_file")
+        # print("=" * 5)
+        # print("target_file")
         #show target_file content
-        with open(target_file, encoding="utf-8") as file:
-            print(file.read())
+        # with open(target_file, encoding="utf-8") as file:
+        #     print(file.read())
 
         machine.main(target_file, input_file, output_file, golden["output_mode"])
 
         with open(target_file, encoding="utf-8") as file:
             human_readable = file.read()
 
-        # assert human_readable.rstrip("\n") == golden.out["out_code_readable"].rstrip("\n")
-        # open("file_log.txt", "w").write(caplog.text)
-        # expected = replace_multiple_spaces_with_one(caplog.text.rstrip("\n").replace("\t","   "))
-        # result = replace_multiple_spaces_with_one(golden.out["out_log"].rstrip("\n").replace("\t","    "))
-        # assert expected == result
+        assert human_readable.rstrip("\n") == golden.out["out_code"].rstrip("\n")
+        open("file_log.txt", "w").write(caplog.text)
+        expected = replace_multiple_spaces_with_one(caplog.text.rstrip("\n").replace("\t","   "))
+        result = replace_multiple_spaces_with_one(golden.out["out_log"].rstrip("\n").replace("\t","    "))
+        assert expected == result

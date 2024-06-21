@@ -1,0 +1,320 @@
+in_source: |-
+ IOVALUE:
+     WORD 0
+ 
+ BEGIN:  ; input(len(username)
+     IN
+     LD IOVALUE
+     ST USERLEN
+     POP
+     LD #USERMSG
+     ST PTR
+     POP
+ 
+ INPUTLOOP:  ; input(username)
+     INC
+     LD USERLEN
+     SWAP
+     BLT     ; прошли заданное количество символов?
+     JUMP END
+     IN
+     OUT
+     LD IOVALUE
+     ST [PTR]+
+     POP
+     JUMP INPUTLOOP
+ 
+ END:
+     HLT
+ 
+ PTR:
+     WORD 0
+ USERLEN:
+     WORD 0
+ USERMSG:
+     WORD 0
+
+in_stdin: |-
+ i wanna die
+
+output_mode: |-
+ text
+   
+
+out_code: |-
+ [
+     {
+         "index": 0,
+         "opcode": "NOP",
+         "arg": 0,
+         "addressing": 0
+     },
+     {
+         "index": 1,
+         "opcode": "IN",
+         "arg": null,
+         "addressing": 5
+     },
+     {
+         "index": 2,
+         "opcode": "LD",
+         "arg": "0",
+         "addressing": 0
+     },
+     {
+         "index": 3,
+         "opcode": "ST",
+         "arg": "21",
+         "addressing": 0
+     },
+     {
+         "index": 4,
+         "opcode": "POP",
+         "arg": null,
+         "addressing": 5
+     },
+     {
+         "index": 5,
+         "opcode": "LD",
+         "arg": "22",
+         "addressing": 2
+     },
+     {
+         "index": 6,
+         "opcode": "ST",
+         "arg": "20",
+         "addressing": 0
+     },
+     {
+         "index": 7,
+         "opcode": "POP",
+         "arg": null,
+         "addressing": 5
+     },
+     {
+         "index": 8,
+         "opcode": "INC",
+         "arg": null,
+         "addressing": 5
+     },
+     {
+         "index": 9,
+         "opcode": "LD",
+         "arg": "21",
+         "addressing": 0
+     },
+     {
+         "index": 10,
+         "opcode": "SWAP",
+         "arg": null,
+         "addressing": 5
+     },
+     {
+         "index": 11,
+         "opcode": "BLT",
+         "arg": null,
+         "addressing": 5
+     },
+     {
+         "index": 12,
+         "opcode": "JUMP",
+         "arg": "19",
+         "addressing": 0
+     },
+     {
+         "index": 13,
+         "opcode": "IN",
+         "arg": null,
+         "addressing": 5
+     },
+     {
+         "index": 14,
+         "opcode": "OUT",
+         "arg": null,
+         "addressing": 5
+     },
+     {
+         "index": 15,
+         "opcode": "LD",
+         "arg": "0",
+         "addressing": 0
+     },
+     {
+         "index": 16,
+         "opcode": "ST",
+         "arg": "20",
+         "addressing": 3
+     },
+     {
+         "index": 17,
+         "opcode": "POP",
+         "arg": null,
+         "addressing": 5
+     },
+     {
+         "index": 18,
+         "opcode": "JUMP",
+         "arg": "8",
+         "addressing": 0
+     },
+     {
+         "index": 19,
+         "opcode": "HLT",
+         "arg": null,
+         "addressing": 5
+     },
+     {
+         "index": 20,
+         "opcode": "NOP",
+         "arg": 0,
+         "addressing": 0
+     },
+     {
+         "index": 21,
+         "opcode": "NOP",
+         "arg": 0,
+         "addressing": 0
+     },
+     {
+         "index": 22,
+         "opcode": "NOP",
+         "arg": 0,
+         "addressing": 0
+     }
+ ]
+
+ 
+
+out_stdout: |
+ source LoC: 1 code instr: 23
+ ============================================================
+ instructions_executed: 122 ticks: 1023
+
+out_global: |-
+ i wanna die
+
+
+out_log: |-
+ DEBUG    root:machine.py:348   TICK:    0 	IP:    1 	CR:    0 	AR:    0 	DR:    0 	BR:    0 	STACK: [0 ]
+ DEBUG    root:machine.py:353   TICK:    5 	IP:    2 	CR: IN   	AR:    1 	DR: IN   	BR:    0 	STACK: [0 ]
+ DEBUG    root:machine.py:353   TICK:   16 	IP:    3 	CR: LD0  	AR:    0 	DR:   11 	BR:    0 	STACK: [11 ]
+ DEBUG    root:machine.py:353   TICK:   27 	IP:    4 	CR: ST21 	AR:   21 	DR:   11 	BR:    0 	STACK: [11 ]
+ DEBUG    root:machine.py:353   TICK:   32 	IP:    5 	CR: POP  	AR:    4 	DR: POP  	BR:    0 	STACK: [0 ]
+ DEBUG    root:machine.py:353   TICK:   39 	IP:    6 	CR: LD22 	AR:    5 	DR:   22 	BR:    0 	STACK: [22 ]
+ DEBUG    root:machine.py:353   TICK:   50 	IP:    7 	CR: ST20 	AR:   20 	DR:   22 	BR:    0 	STACK: [22 ]
+ DEBUG    root:machine.py:353   TICK:   55 	IP:    8 	CR: POP  	AR:    7 	DR: POP  	BR:    0 	STACK: [0 ]
+ DEBUG    root:machine.py:353   TICK:   61 	IP:    9 	CR: INC  	AR:    8 	DR: INC  	BR:    0 	STACK: [1 ]
+ DEBUG    root:machine.py:353   TICK:   72 	IP:   10 	CR: LD21 	AR:   21 	DR:   11 	BR:    0 	STACK: [11 ]
+ DEBUG    root:machine.py:353   TICK:   79 	IP:   11 	CR: SWAP 	AR:   10 	DR: SWAP 	BR:    1 	STACK: [1 ]
+ DEBUG    root:machine.py:353   TICK:   86 	IP:   13 	CR: BLT  	AR:   11 	DR: BLT  	BR:    1 	STACK: [1 ]
+ DEBUG    root:machine.py:353   TICK:   91 	IP:   14 	CR: IN   	AR:   13 	DR: IN   	BR:    1 	STACK: [1 ]
+ DEBUG    root:machine.py:353   TICK:   96 	IP:   15 	CR: OUT  	AR:   14 	DR: OUT  	BR:    1 	STACK: [1 ]
+ DEBUG    root:machine.py:353   TICK:  107 	IP:   16 	CR: LD0  	AR:    0 	DR:  105 	BR:    1 	STACK: [105 ]
+ DEBUG    root:machine.py:353   TICK:  124 	IP:   17 	CR: ST20 	AR:   22 	DR:  105 	BR:    1 	STACK: [105 ]
+ DEBUG    root:machine.py:353   TICK:  129 	IP:   18 	CR: POP  	AR:   17 	DR: POP  	BR:    1 	STACK: [1 ]
+ DEBUG    root:machine.py:353   TICK:  139 	IP:    8 	CR: JUMP8 	AR:    8 	DR: INC  	BR:    1 	STACK: [1 ]
+ DEBUG    root:machine.py:353   TICK:  145 	IP:    9 	CR: INC  	AR:    8 	DR: INC  	BR:    1 	STACK: [2 ]
+ DEBUG    root:machine.py:353   TICK:  156 	IP:   10 	CR: LD21 	AR:   21 	DR:   11 	BR:    1 	STACK: [11 ]
+ DEBUG    root:machine.py:353   TICK:  163 	IP:   11 	CR: SWAP 	AR:   10 	DR: SWAP 	BR:    2 	STACK: [2 ]
+ DEBUG    root:machine.py:353   TICK:  170 	IP:   13 	CR: BLT  	AR:   11 	DR: BLT  	BR:    2 	STACK: [2 ]
+ DEBUG    root:machine.py:353   TICK:  175 	IP:   14 	CR: IN   	AR:   13 	DR: IN   	BR:    2 	STACK: [2 ]
+ DEBUG    root:machine.py:353   TICK:  180 	IP:   15 	CR: OUT  	AR:   14 	DR: OUT  	BR:    2 	STACK: [2 ]
+ DEBUG    root:machine.py:353   TICK:  191 	IP:   16 	CR: LD0  	AR:    0 	DR:   32 	BR:    2 	STACK: [32 ]
+ DEBUG    root:machine.py:353   TICK:  208 	IP:   17 	CR: ST20 	AR:   23 	DR:   32 	BR:    2 	STACK: [32 ]
+ DEBUG    root:machine.py:353   TICK:  213 	IP:   18 	CR: POP  	AR:   17 	DR: POP  	BR:    2 	STACK: [2 ]
+ DEBUG    root:machine.py:353   TICK:  223 	IP:    8 	CR: JUMP8 	AR:    8 	DR: INC  	BR:    2 	STACK: [2 ]
+ DEBUG    root:machine.py:353   TICK:  229 	IP:    9 	CR: INC  	AR:    8 	DR: INC  	BR:    2 	STACK: [3 ]
+ DEBUG    root:machine.py:353   TICK:  240 	IP:   10 	CR: LD21 	AR:   21 	DR:   11 	BR:    2 	STACK: [11 ]
+ DEBUG    root:machine.py:353   TICK:  247 	IP:   11 	CR: SWAP 	AR:   10 	DR: SWAP 	BR:    3 	STACK: [3 ]
+ DEBUG    root:machine.py:353   TICK:  254 	IP:   13 	CR: BLT  	AR:   11 	DR: BLT  	BR:    3 	STACK: [3 ]
+ DEBUG    root:machine.py:353   TICK:  259 	IP:   14 	CR: IN   	AR:   13 	DR: IN   	BR:    3 	STACK: [3 ]
+ DEBUG    root:machine.py:353   TICK:  264 	IP:   15 	CR: OUT  	AR:   14 	DR: OUT  	BR:    3 	STACK: [3 ]
+ DEBUG    root:machine.py:353   TICK:  275 	IP:   16 	CR: LD0  	AR:    0 	DR:  119 	BR:    3 	STACK: [119 ]
+ DEBUG    root:machine.py:353   TICK:  292 	IP:   17 	CR: ST20 	AR:   24 	DR:  119 	BR:    3 	STACK: [119 ]
+ DEBUG    root:machine.py:353   TICK:  297 	IP:   18 	CR: POP  	AR:   17 	DR: POP  	BR:    3 	STACK: [3 ]
+ DEBUG    root:machine.py:353   TICK:  307 	IP:    8 	CR: JUMP8 	AR:    8 	DR: INC  	BR:    3 	STACK: [3 ]
+ DEBUG    root:machine.py:353   TICK:  313 	IP:    9 	CR: INC  	AR:    8 	DR: INC  	BR:    3 	STACK: [4 ]
+ DEBUG    root:machine.py:353   TICK:  324 	IP:   10 	CR: LD21 	AR:   21 	DR:   11 	BR:    3 	STACK: [11 ]
+ DEBUG    root:machine.py:353   TICK:  331 	IP:   11 	CR: SWAP 	AR:   10 	DR: SWAP 	BR:    4 	STACK: [4 ]
+ DEBUG    root:machine.py:353   TICK:  338 	IP:   13 	CR: BLT  	AR:   11 	DR: BLT  	BR:    4 	STACK: [4 ]
+ DEBUG    root:machine.py:353   TICK:  343 	IP:   14 	CR: IN   	AR:   13 	DR: IN   	BR:    4 	STACK: [4 ]
+ DEBUG    root:machine.py:353   TICK:  348 	IP:   15 	CR: OUT  	AR:   14 	DR: OUT  	BR:    4 	STACK: [4 ]
+ DEBUG    root:machine.py:353   TICK:  359 	IP:   16 	CR: LD0  	AR:    0 	DR:   97 	BR:    4 	STACK: [97 ]
+ DEBUG    root:machine.py:353   TICK:  376 	IP:   17 	CR: ST20 	AR:   25 	DR:   97 	BR:    4 	STACK: [97 ]
+ DEBUG    root:machine.py:353   TICK:  381 	IP:   18 	CR: POP  	AR:   17 	DR: POP  	BR:    4 	STACK: [4 ]
+ DEBUG    root:machine.py:353   TICK:  391 	IP:    8 	CR: JUMP8 	AR:    8 	DR: INC  	BR:    4 	STACK: [4 ]
+ DEBUG    root:machine.py:353   TICK:  397 	IP:    9 	CR: INC  	AR:    8 	DR: INC  	BR:    4 	STACK: [5 ]
+ DEBUG    root:machine.py:353   TICK:  408 	IP:   10 	CR: LD21 	AR:   21 	DR:   11 	BR:    4 	STACK: [11 ]
+ DEBUG    root:machine.py:353   TICK:  415 	IP:   11 	CR: SWAP 	AR:   10 	DR: SWAP 	BR:    5 	STACK: [5 ]
+ DEBUG    root:machine.py:353   TICK:  422 	IP:   13 	CR: BLT  	AR:   11 	DR: BLT  	BR:    5 	STACK: [5 ]
+ DEBUG    root:machine.py:353   TICK:  427 	IP:   14 	CR: IN   	AR:   13 	DR: IN   	BR:    5 	STACK: [5 ]
+ DEBUG    root:machine.py:353   TICK:  432 	IP:   15 	CR: OUT  	AR:   14 	DR: OUT  	BR:    5 	STACK: [5 ]
+ DEBUG    root:machine.py:353   TICK:  443 	IP:   16 	CR: LD0  	AR:    0 	DR:  110 	BR:    5 	STACK: [110 ]
+ DEBUG    root:machine.py:353   TICK:  460 	IP:   17 	CR: ST20 	AR:   26 	DR:  110 	BR:    5 	STACK: [110 ]
+ DEBUG    root:machine.py:353   TICK:  465 	IP:   18 	CR: POP  	AR:   17 	DR: POP  	BR:    5 	STACK: [5 ]
+ DEBUG    root:machine.py:353   TICK:  475 	IP:    8 	CR: JUMP8 	AR:    8 	DR: INC  	BR:    5 	STACK: [5 ]
+ DEBUG    root:machine.py:353   TICK:  481 	IP:    9 	CR: INC  	AR:    8 	DR: INC  	BR:    5 	STACK: [6 ]
+ DEBUG    root:machine.py:353   TICK:  492 	IP:   10 	CR: LD21 	AR:   21 	DR:   11 	BR:    5 	STACK: [11 ]
+ DEBUG    root:machine.py:353   TICK:  499 	IP:   11 	CR: SWAP 	AR:   10 	DR: SWAP 	BR:    6 	STACK: [6 ]
+ DEBUG    root:machine.py:353   TICK:  506 	IP:   13 	CR: BLT  	AR:   11 	DR: BLT  	BR:    6 	STACK: [6 ]
+ DEBUG    root:machine.py:353   TICK:  511 	IP:   14 	CR: IN   	AR:   13 	DR: IN   	BR:    6 	STACK: [6 ]
+ DEBUG    root:machine.py:353   TICK:  516 	IP:   15 	CR: OUT  	AR:   14 	DR: OUT  	BR:    6 	STACK: [6 ]
+ DEBUG    root:machine.py:353   TICK:  527 	IP:   16 	CR: LD0  	AR:    0 	DR:  110 	BR:    6 	STACK: [110 ]
+ DEBUG    root:machine.py:353   TICK:  544 	IP:   17 	CR: ST20 	AR:   27 	DR:  110 	BR:    6 	STACK: [110 ]
+ DEBUG    root:machine.py:353   TICK:  549 	IP:   18 	CR: POP  	AR:   17 	DR: POP  	BR:    6 	STACK: [6 ]
+ DEBUG    root:machine.py:353   TICK:  559 	IP:    8 	CR: JUMP8 	AR:    8 	DR: INC  	BR:    6 	STACK: [6 ]
+ DEBUG    root:machine.py:353   TICK:  565 	IP:    9 	CR: INC  	AR:    8 	DR: INC  	BR:    6 	STACK: [7 ]
+ DEBUG    root:machine.py:353   TICK:  576 	IP:   10 	CR: LD21 	AR:   21 	DR:   11 	BR:    6 	STACK: [11 ]
+ DEBUG    root:machine.py:353   TICK:  583 	IP:   11 	CR: SWAP 	AR:   10 	DR: SWAP 	BR:    7 	STACK: [7 ]
+ DEBUG    root:machine.py:353   TICK:  590 	IP:   13 	CR: BLT  	AR:   11 	DR: BLT  	BR:    7 	STACK: [7 ]
+ DEBUG    root:machine.py:353   TICK:  595 	IP:   14 	CR: IN   	AR:   13 	DR: IN   	BR:    7 	STACK: [7 ]
+ DEBUG    root:machine.py:353   TICK:  600 	IP:   15 	CR: OUT  	AR:   14 	DR: OUT  	BR:    7 	STACK: [7 ]
+ DEBUG    root:machine.py:353   TICK:  611 	IP:   16 	CR: LD0  	AR:    0 	DR:   97 	BR:    7 	STACK: [97 ]
+ DEBUG    root:machine.py:353   TICK:  628 	IP:   17 	CR: ST20 	AR:   28 	DR:   97 	BR:    7 	STACK: [97 ]
+ DEBUG    root:machine.py:353   TICK:  633 	IP:   18 	CR: POP  	AR:   17 	DR: POP  	BR:    7 	STACK: [7 ]
+ DEBUG    root:machine.py:353   TICK:  643 	IP:    8 	CR: JUMP8 	AR:    8 	DR: INC  	BR:    7 	STACK: [7 ]
+ DEBUG    root:machine.py:353   TICK:  649 	IP:    9 	CR: INC  	AR:    8 	DR: INC  	BR:    7 	STACK: [8 ]
+ DEBUG    root:machine.py:353   TICK:  660 	IP:   10 	CR: LD21 	AR:   21 	DR:   11 	BR:    7 	STACK: [11 ]
+ DEBUG    root:machine.py:353   TICK:  667 	IP:   11 	CR: SWAP 	AR:   10 	DR: SWAP 	BR:    8 	STACK: [8 ]
+ DEBUG    root:machine.py:353   TICK:  674 	IP:   13 	CR: BLT  	AR:   11 	DR: BLT  	BR:    8 	STACK: [8 ]
+ DEBUG    root:machine.py:353   TICK:  679 	IP:   14 	CR: IN   	AR:   13 	DR: IN   	BR:    8 	STACK: [8 ]
+ DEBUG    root:machine.py:353   TICK:  684 	IP:   15 	CR: OUT  	AR:   14 	DR: OUT  	BR:    8 	STACK: [8 ]
+ DEBUG    root:machine.py:353   TICK:  695 	IP:   16 	CR: LD0  	AR:    0 	DR:   32 	BR:    8 	STACK: [32 ]
+ DEBUG    root:machine.py:353   TICK:  712 	IP:   17 	CR: ST20 	AR:   29 	DR:   32 	BR:    8 	STACK: [32 ]
+ DEBUG    root:machine.py:353   TICK:  717 	IP:   18 	CR: POP  	AR:   17 	DR: POP  	BR:    8 	STACK: [8 ]
+ DEBUG    root:machine.py:353   TICK:  727 	IP:    8 	CR: JUMP8 	AR:    8 	DR: INC  	BR:    8 	STACK: [8 ]
+ DEBUG    root:machine.py:353   TICK:  733 	IP:    9 	CR: INC  	AR:    8 	DR: INC  	BR:    8 	STACK: [9 ]
+ DEBUG    root:machine.py:353   TICK:  744 	IP:   10 	CR: LD21 	AR:   21 	DR:   11 	BR:    8 	STACK: [11 ]
+ DEBUG    root:machine.py:353   TICK:  751 	IP:   11 	CR: SWAP 	AR:   10 	DR: SWAP 	BR:    9 	STACK: [9 ]
+ DEBUG    root:machine.py:353   TICK:  758 	IP:   13 	CR: BLT  	AR:   11 	DR: BLT  	BR:    9 	STACK: [9 ]
+ DEBUG    root:machine.py:353   TICK:  763 	IP:   14 	CR: IN   	AR:   13 	DR: IN   	BR:    9 	STACK: [9 ]
+ DEBUG    root:machine.py:353   TICK:  768 	IP:   15 	CR: OUT  	AR:   14 	DR: OUT  	BR:    9 	STACK: [9 ]
+ DEBUG    root:machine.py:353   TICK:  779 	IP:   16 	CR: LD0  	AR:    0 	DR:  100 	BR:    9 	STACK: [100 ]
+ DEBUG    root:machine.py:353   TICK:  796 	IP:   17 	CR: ST20 	AR:   30 	DR:  100 	BR:    9 	STACK: [100 ]
+ DEBUG    root:machine.py:353   TICK:  801 	IP:   18 	CR: POP  	AR:   17 	DR: POP  	BR:    9 	STACK: [9 ]
+ DEBUG    root:machine.py:353   TICK:  811 	IP:    8 	CR: JUMP8 	AR:    8 	DR: INC  	BR:    9 	STACK: [9 ]
+ DEBUG    root:machine.py:353   TICK:  817 	IP:    9 	CR: INC  	AR:    8 	DR: INC  	BR:    9 	STACK: [10 ]
+ DEBUG    root:machine.py:353   TICK:  828 	IP:   10 	CR: LD21 	AR:   21 	DR:   11 	BR:    9 	STACK: [11 ]
+ DEBUG    root:machine.py:353   TICK:  835 	IP:   11 	CR: SWAP 	AR:   10 	DR: SWAP 	BR:   10 	STACK: [10 ]
+ DEBUG    root:machine.py:353   TICK:  842 	IP:   13 	CR: BLT  	AR:   11 	DR: BLT  	BR:   10 	STACK: [10 ]
+ DEBUG    root:machine.py:353   TICK:  847 	IP:   14 	CR: IN   	AR:   13 	DR: IN   	BR:   10 	STACK: [10 ]
+ DEBUG    root:machine.py:353   TICK:  852 	IP:   15 	CR: OUT  	AR:   14 	DR: OUT  	BR:   10 	STACK: [10 ]
+ DEBUG    root:machine.py:353   TICK:  863 	IP:   16 	CR: LD0  	AR:    0 	DR:  105 	BR:   10 	STACK: [105 ]
+ DEBUG    root:machine.py:353   TICK:  880 	IP:   17 	CR: ST20 	AR:   31 	DR:  105 	BR:   10 	STACK: [105 ]
+ DEBUG    root:machine.py:353   TICK:  885 	IP:   18 	CR: POP  	AR:   17 	DR: POP  	BR:   10 	STACK: [10 ]
+ DEBUG    root:machine.py:353   TICK:  895 	IP:    8 	CR: JUMP8 	AR:    8 	DR: INC  	BR:   10 	STACK: [10 ]
+ DEBUG    root:machine.py:353   TICK:  901 	IP:    9 	CR: INC  	AR:    8 	DR: INC  	BR:   10 	STACK: [11 ]
+ DEBUG    root:machine.py:353   TICK:  912 	IP:   10 	CR: LD21 	AR:   21 	DR:   11 	BR:   10 	STACK: [11 ]
+ DEBUG    root:machine.py:353   TICK:  919 	IP:   11 	CR: SWAP 	AR:   10 	DR: SWAP 	BR:   11 	STACK: [11 ]
+ DEBUG    root:machine.py:353   TICK:  926 	IP:   13 	CR: BLT  	AR:   11 	DR: BLT  	BR:   11 	STACK: [11 ]
+ DEBUG    root:machine.py:353   TICK:  931 	IP:   14 	CR: IN   	AR:   13 	DR: IN   	BR:   11 	STACK: [11 ]
+ DEBUG    root:machine.py:353   TICK:  936 	IP:   15 	CR: OUT  	AR:   14 	DR: OUT  	BR:   11 	STACK: [11 ]
+ DEBUG    root:machine.py:353   TICK:  947 	IP:   16 	CR: LD0  	AR:    0 	DR:  101 	BR:   11 	STACK: [101 ]
+ DEBUG    root:machine.py:353   TICK:  964 	IP:   17 	CR: ST20 	AR:   32 	DR:  101 	BR:   11 	STACK: [101 ]
+ DEBUG    root:machine.py:353   TICK:  969 	IP:   18 	CR: POP  	AR:   17 	DR: POP  	BR:   11 	STACK: [11 ]
+ DEBUG    root:machine.py:353   TICK:  979 	IP:    8 	CR: JUMP8 	AR:    8 	DR: INC  	BR:   11 	STACK: [11 ]
+ DEBUG    root:machine.py:353   TICK:  985 	IP:    9 	CR: INC  	AR:    8 	DR: INC  	BR:   11 	STACK: [12 ]
+ DEBUG    root:machine.py:353   TICK:  996 	IP:   10 	CR: LD21 	AR:   21 	DR:   11 	BR:   11 	STACK: [11 ]
+ DEBUG    root:machine.py:353   TICK: 1003 	IP:   11 	CR: SWAP 	AR:   10 	DR: SWAP 	BR:   12 	STACK: [12 ]
+ DEBUG    root:machine.py:353   TICK: 1009 	IP:   12 	CR: BLT  	AR:   11 	DR: BLT  	BR:   12 	STACK: [12 ]
+ DEBUG    root:machine.py:353   TICK: 1019 	IP:   19 	CR: JUMP19 	AR:   19 	DR: HLT  	BR:   12 	STACK: [12 ]
