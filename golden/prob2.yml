@@ -1,0 +1,600 @@
+in_source: |-
+  IOVALUE:
+    WORD 0
+
+  BEGIN:  ; input(len(username)
+      IN          ; skip input buff length
+      IN          ; how many numbers need to be calculated
+      LD IOVALUE
+      ST LEN
+      POP
+  
+      IN          ; first number
+      OUT
+      LD IOVALUE
+      IN          ; second number
+      OUT
+      LD IOVALUE
+      ST BUFF
+      CLA
+  LOOP:
+      INC
+      DUP
+      LD LEN
+      BGT
+      JUMP END
+      POP
+      SWAP
+      LD BUFF
+      ADD
+      ST IOVALUE
+      OUT
+      LD BUFF
+      SWAP
+      ST BUFF
+      POP
+      SWAP
+      JUMP LOOP
+  END:
+      HLT
+  LEN:
+      WORD 10
+  BUFF:
+      WORD 0
+in_stdin: |-
+ [20, 1, 2]
+out_code: |-
+  [
+      {
+          "index": 0,
+          "opcode": "NOP",
+          "arg": 0,
+          "addressing": 0
+      },
+      {
+          "index": 1,
+          "opcode": "IN",
+          "arg": null,
+          "addressing": 5
+      },
+      {
+          "index": 2,
+          "opcode": "IN",
+          "arg": null,
+          "addressing": 5
+      },
+      {
+          "index": 3,
+          "opcode": "LD",
+          "arg": "0",
+          "addressing": 0
+      },
+      {
+          "index": 4,
+          "opcode": "ST",
+          "arg": "32",
+          "addressing": 0
+      },
+      {
+          "index": 5,
+          "opcode": "POP",
+          "arg": null,
+          "addressing": 5
+      },
+      {
+          "index": 6,
+          "opcode": "IN",
+          "arg": null,
+          "addressing": 5
+      },
+      {
+          "index": 7,
+          "opcode": "OUT",
+          "arg": null,
+          "addressing": 5
+      },
+      {
+          "index": 8,
+          "opcode": "LD",
+          "arg": "0",
+          "addressing": 0
+      },
+      {
+          "index": 9,
+          "opcode": "IN",
+          "arg": null,
+          "addressing": 5
+      },
+      {
+          "index": 10,
+          "opcode": "OUT",
+          "arg": null,
+          "addressing": 5
+      },
+      {
+          "index": 11,
+          "opcode": "LD",
+          "arg": "0",
+          "addressing": 0
+      },
+      {
+          "index": 12,
+          "opcode": "ST",
+          "arg": "33",
+          "addressing": 0
+      },
+      {
+          "index": 13,
+          "opcode": "CLA",
+          "arg": null,
+          "addressing": 5
+      },
+      {
+          "index": 14,
+          "opcode": "INC",
+          "arg": null,
+          "addressing": 5
+      },
+      {
+          "index": 15,
+          "opcode": "DUP",
+          "arg": null,
+          "addressing": 5
+      },
+      {
+          "index": 16,
+          "opcode": "LD",
+          "arg": "32",
+          "addressing": 0
+      },
+      {
+          "index": 17,
+          "opcode": "BGT",
+          "arg": null,
+          "addressing": 5
+      },
+      {
+          "index": 18,
+          "opcode": "JUMP",
+          "arg": "31",
+          "addressing": 0
+      },
+      {
+          "index": 19,
+          "opcode": "POP",
+          "arg": null,
+          "addressing": 5
+      },
+      {
+          "index": 20,
+          "opcode": "SWAP",
+          "arg": null,
+          "addressing": 5
+      },
+      {
+          "index": 21,
+          "opcode": "LD",
+          "arg": "33",
+          "addressing": 0
+      },
+      {
+          "index": 22,
+          "opcode": "ADD",
+          "arg": null,
+          "addressing": 5
+      },
+      {
+          "index": 23,
+          "opcode": "ST",
+          "arg": "0",
+          "addressing": 0
+      },
+      {
+          "index": 24,
+          "opcode": "OUT",
+          "arg": null,
+          "addressing": 5
+      },
+      {
+          "index": 25,
+          "opcode": "LD",
+          "arg": "33",
+          "addressing": 0
+      },
+      {
+          "index": 26,
+          "opcode": "SWAP",
+          "arg": null,
+          "addressing": 5
+      },
+      {
+          "index": 27,
+          "opcode": "ST",
+          "arg": "33",
+          "addressing": 0
+      },
+      {
+          "index": 28,
+          "opcode": "POP",
+          "arg": null,
+          "addressing": 5
+      },
+      {
+          "index": 29,
+          "opcode": "SWAP",
+          "arg": null,
+          "addressing": 5
+      },
+      {
+          "index": 30,
+          "opcode": "JUMP",
+          "arg": "14",
+          "addressing": 0
+      },
+      {
+          "index": 31,
+          "opcode": "HLT",
+          "arg": null,
+          "addressing": 5
+      },
+      {
+          "index": 32,
+          "opcode": "NOP",
+          "arg": 10,
+          "addressing": 0
+      },
+      {
+          "index": 33,
+          "opcode": "NOP",
+          "arg": 0,
+          "addressing": 0
+      }
+  ]
+out_stdout: |
+ source LoC: 1 code instr: 34
+ ============================================================
+ instructions_executed: 338 ticks: 2638
+
+out_global: |-
+ 1 2 3 5 8 13 21 34 55 89 144 233 377 610 987 1597 2584 4181 6765 10946 17711 28657 
+
+out_log: |
+  DEBUG:root:  TICK:    0 	IP:    1 	CR:    0 	AR:    0 	DR:    0 	BR:    0 	STACK: [0 ]
+  DEBUG:root:  TICK:    5 	IP:    2 	CR: IN   	AR:    1 	DR: IN   	BR:    0 	STACK: [0 ]
+  DEBUG:root:  TICK:   10 	IP:    3 	CR: IN   	AR:    2 	DR: IN   	BR:    0 	STACK: [0 ]
+  DEBUG:root:  TICK:   21 	IP:    4 	CR: LD0  	AR:    0 	DR:   20 	BR:    0 	STACK: [20 ]
+  DEBUG:root:  TICK:   32 	IP:    5 	CR: ST32 	AR:   32 	DR:   20 	BR:    0 	STACK: [20 ]
+  DEBUG:root:  TICK:   37 	IP:    6 	CR: POP  	AR:    5 	DR: POP  	BR:    0 	STACK: [0 ]
+  DEBUG:root:  TICK:   42 	IP:    7 	CR: IN   	AR:    6 	DR: IN   	BR:    0 	STACK: [0 ]
+  DEBUG:root:  TICK:   47 	IP:    8 	CR: OUT  	AR:    7 	DR: OUT  	BR:    0 	STACK: [0 ]
+  DEBUG:root:  TICK:   58 	IP:    9 	CR: LD0  	AR:    0 	DR:    1 	BR:    0 	STACK: [1 ]
+  DEBUG:root:  TICK:   63 	IP:   10 	CR: IN   	AR:    9 	DR: IN   	BR:    0 	STACK: [1 ]
+  DEBUG:root:  TICK:   68 	IP:   11 	CR: OUT  	AR:   10 	DR: OUT  	BR:    0 	STACK: [1 ]
+  DEBUG:root:  TICK:   79 	IP:   12 	CR: LD0  	AR:    0 	DR:    2 	BR:    0 	STACK: [2 1 ]
+  DEBUG:root:  TICK:   90 	IP:   13 	CR: ST33 	AR:   33 	DR:    2 	BR:    0 	STACK: [2 1 ]
+  DEBUG:root:  TICK:   96 	IP:   14 	CR: CLA  	AR:   13 	DR: CLA  	BR:    0 	STACK: [0 1 ]
+  DEBUG:root:  TICK:  102 	IP:   15 	CR: INC  	AR:   14 	DR: INC  	BR:    0 	STACK: [1 1 ]
+  DEBUG:root:  TICK:  107 	IP:   16 	CR: DUP  	AR:   15 	DR: DUP  	BR:    0 	STACK: [1 1 1 ]
+  DEBUG:root:  TICK:  118 	IP:   17 	CR: LD32 	AR:   32 	DR:   20 	BR:    0 	STACK: [20 1 1 1 ]
+  DEBUG:root:  TICK:  125 	IP:   19 	CR: BGT  	AR:   17 	DR: BGT  	BR:    0 	STACK: [20 1 1 ]
+  DEBUG:root:  TICK:  130 	IP:   20 	CR: POP  	AR:   19 	DR: POP  	BR:    0 	STACK: [1 1 ]
+  DEBUG:root:  TICK:  137 	IP:   21 	CR: SWAP 	AR:   20 	DR: SWAP 	BR:    1 	STACK: [1 1 ]
+  DEBUG:root:  TICK:  148 	IP:   22 	CR: LD33 	AR:   33 	DR:    2 	BR:    1 	STACK: [2 1 1 ]
+  DEBUG:root:  TICK:  154 	IP:   23 	CR: ADD  	AR:   22 	DR: ADD  	BR:    1 	STACK: [3 1 ]
+  DEBUG:root:  TICK:  165 	IP:   24 	CR: ST0  	AR:    0 	DR:    3 	BR:    1 	STACK: [3 1 ]
+  DEBUG:root:  TICK:  170 	IP:   25 	CR: OUT  	AR:   24 	DR: OUT  	BR:    1 	STACK: [3 1 ]
+  DEBUG:root:  TICK:  181 	IP:   26 	CR: LD33 	AR:   33 	DR:    2 	BR:    1 	STACK: [2 3 1 ]
+  DEBUG:root:  TICK:  188 	IP:   27 	CR: SWAP 	AR:   26 	DR: SWAP 	BR:    3 	STACK: [3 2 1 ]
+  DEBUG:root:  TICK:  199 	IP:   28 	CR: ST33 	AR:   33 	DR:    3 	BR:    3 	STACK: [3 2 1 ]
+  DEBUG:root:  TICK:  204 	IP:   29 	CR: POP  	AR:   28 	DR: POP  	BR:    3 	STACK: [2 1 ]
+  DEBUG:root:  TICK:  211 	IP:   30 	CR: SWAP 	AR:   29 	DR: SWAP 	BR:    1 	STACK: [1 2 ]
+  DEBUG:root:  TICK:  221 	IP:   14 	CR: JUMP14 	AR:   14 	DR: INC  	BR:    1 	STACK: [1 2 ]
+  DEBUG:root:  TICK:  227 	IP:   15 	CR: INC  	AR:   14 	DR: INC  	BR:    1 	STACK: [2 2 ]
+  DEBUG:root:  TICK:  232 	IP:   16 	CR: DUP  	AR:   15 	DR: DUP  	BR:    1 	STACK: [2 2 2 ]
+  DEBUG:root:  TICK:  243 	IP:   17 	CR: LD32 	AR:   32 	DR:   20 	BR:    1 	STACK: [20 2 2 2 ]
+  DEBUG:root:  TICK:  250 	IP:   19 	CR: BGT  	AR:   17 	DR: BGT  	BR:    1 	STACK: [20 2 2 ]
+  DEBUG:root:  TICK:  255 	IP:   20 	CR: POP  	AR:   19 	DR: POP  	BR:    1 	STACK: [2 2 ]
+  DEBUG:root:  TICK:  262 	IP:   21 	CR: SWAP 	AR:   20 	DR: SWAP 	BR:    2 	STACK: [2 2 ]
+  DEBUG:root:  TICK:  273 	IP:   22 	CR: LD33 	AR:   33 	DR:    3 	BR:    2 	STACK: [3 2 2 ]
+  DEBUG:root:  TICK:  279 	IP:   23 	CR: ADD  	AR:   22 	DR: ADD  	BR:    2 	STACK: [5 2 ]
+  DEBUG:root:  TICK:  290 	IP:   24 	CR: ST0  	AR:    0 	DR:    5 	BR:    2 	STACK: [5 2 ]
+  DEBUG:root:  TICK:  295 	IP:   25 	CR: OUT  	AR:   24 	DR: OUT  	BR:    2 	STACK: [5 2 ]
+  DEBUG:root:  TICK:  306 	IP:   26 	CR: LD33 	AR:   33 	DR:    3 	BR:    2 	STACK: [3 5 2 ]
+  DEBUG:root:  TICK:  313 	IP:   27 	CR: SWAP 	AR:   26 	DR: SWAP 	BR:    5 	STACK: [5 3 2 ]
+  DEBUG:root:  TICK:  324 	IP:   28 	CR: ST33 	AR:   33 	DR:    5 	BR:    5 	STACK: [5 3 2 ]
+  DEBUG:root:  TICK:  329 	IP:   29 	CR: POP  	AR:   28 	DR: POP  	BR:    5 	STACK: [3 2 ]
+  DEBUG:root:  TICK:  336 	IP:   30 	CR: SWAP 	AR:   29 	DR: SWAP 	BR:    2 	STACK: [2 3 ]
+  DEBUG:root:  TICK:  346 	IP:   14 	CR: JUMP14 	AR:   14 	DR: INC  	BR:    2 	STACK: [2 3 ]
+  DEBUG:root:  TICK:  352 	IP:   15 	CR: INC  	AR:   14 	DR: INC  	BR:    2 	STACK: [3 3 ]
+  DEBUG:root:  TICK:  357 	IP:   16 	CR: DUP  	AR:   15 	DR: DUP  	BR:    2 	STACK: [3 3 3 ]
+  DEBUG:root:  TICK:  368 	IP:   17 	CR: LD32 	AR:   32 	DR:   20 	BR:    2 	STACK: [20 3 3 3 ]
+  DEBUG:root:  TICK:  375 	IP:   19 	CR: BGT  	AR:   17 	DR: BGT  	BR:    2 	STACK: [20 3 3 ]
+  DEBUG:root:  TICK:  380 	IP:   20 	CR: POP  	AR:   19 	DR: POP  	BR:    2 	STACK: [3 3 ]
+  DEBUG:root:  TICK:  387 	IP:   21 	CR: SWAP 	AR:   20 	DR: SWAP 	BR:    3 	STACK: [3 3 ]
+  DEBUG:root:  TICK:  398 	IP:   22 	CR: LD33 	AR:   33 	DR:    5 	BR:    3 	STACK: [5 3 3 ]
+  DEBUG:root:  TICK:  404 	IP:   23 	CR: ADD  	AR:   22 	DR: ADD  	BR:    3 	STACK: [8 3 ]
+  DEBUG:root:  TICK:  415 	IP:   24 	CR: ST0  	AR:    0 	DR:    8 	BR:    3 	STACK: [8 3 ]
+  DEBUG:root:  TICK:  420 	IP:   25 	CR: OUT  	AR:   24 	DR: OUT  	BR:    3 	STACK: [8 3 ]
+  DEBUG:root:  TICK:  431 	IP:   26 	CR: LD33 	AR:   33 	DR:    5 	BR:    3 	STACK: [5 8 3 ]
+  DEBUG:root:  TICK:  438 	IP:   27 	CR: SWAP 	AR:   26 	DR: SWAP 	BR:    8 	STACK: [8 5 3 ]
+  DEBUG:root:  TICK:  449 	IP:   28 	CR: ST33 	AR:   33 	DR:    8 	BR:    8 	STACK: [8 5 3 ]
+  DEBUG:root:  TICK:  454 	IP:   29 	CR: POP  	AR:   28 	DR: POP  	BR:    8 	STACK: [5 3 ]
+  DEBUG:root:  TICK:  461 	IP:   30 	CR: SWAP 	AR:   29 	DR: SWAP 	BR:    3 	STACK: [3 5 ]
+  DEBUG:root:  TICK:  471 	IP:   14 	CR: JUMP14 	AR:   14 	DR: INC  	BR:    3 	STACK: [3 5 ]
+  DEBUG:root:  TICK:  477 	IP:   15 	CR: INC  	AR:   14 	DR: INC  	BR:    3 	STACK: [4 5 ]
+  DEBUG:root:  TICK:  482 	IP:   16 	CR: DUP  	AR:   15 	DR: DUP  	BR:    3 	STACK: [4 4 5 ]
+  DEBUG:root:  TICK:  493 	IP:   17 	CR: LD32 	AR:   32 	DR:   20 	BR:    3 	STACK: [20 4 4 5 ]
+  DEBUG:root:  TICK:  500 	IP:   19 	CR: BGT  	AR:   17 	DR: BGT  	BR:    3 	STACK: [20 4 5 ]
+  DEBUG:root:  TICK:  505 	IP:   20 	CR: POP  	AR:   19 	DR: POP  	BR:    3 	STACK: [4 5 ]
+  DEBUG:root:  TICK:  512 	IP:   21 	CR: SWAP 	AR:   20 	DR: SWAP 	BR:    5 	STACK: [5 4 ]
+  DEBUG:root:  TICK:  523 	IP:   22 	CR: LD33 	AR:   33 	DR:    8 	BR:    5 	STACK: [8 5 4 ]
+  DEBUG:root:  TICK:  529 	IP:   23 	CR: ADD  	AR:   22 	DR: ADD  	BR:    5 	STACK: [13 4 ]
+  DEBUG:root:  TICK:  540 	IP:   24 	CR: ST0  	AR:    0 	DR:   13 	BR:    5 	STACK: [13 4 ]
+  DEBUG:root:  TICK:  545 	IP:   25 	CR: OUT  	AR:   24 	DR: OUT  	BR:    5 	STACK: [13 4 ]
+  DEBUG:root:  TICK:  556 	IP:   26 	CR: LD33 	AR:   33 	DR:    8 	BR:    5 	STACK: [8 13 4 ]
+  DEBUG:root:  TICK:  563 	IP:   27 	CR: SWAP 	AR:   26 	DR: SWAP 	BR:   13 	STACK: [13 8 4 ]
+  DEBUG:root:  TICK:  574 	IP:   28 	CR: ST33 	AR:   33 	DR:   13 	BR:   13 	STACK: [13 8 4 ]
+  DEBUG:root:  TICK:  579 	IP:   29 	CR: POP  	AR:   28 	DR: POP  	BR:   13 	STACK: [8 4 ]
+  DEBUG:root:  TICK:  586 	IP:   30 	CR: SWAP 	AR:   29 	DR: SWAP 	BR:    4 	STACK: [4 8 ]
+  DEBUG:root:  TICK:  596 	IP:   14 	CR: JUMP14 	AR:   14 	DR: INC  	BR:    4 	STACK: [4 8 ]
+  DEBUG:root:  TICK:  602 	IP:   15 	CR: INC  	AR:   14 	DR: INC  	BR:    4 	STACK: [5 8 ]
+  DEBUG:root:  TICK:  607 	IP:   16 	CR: DUP  	AR:   15 	DR: DUP  	BR:    4 	STACK: [5 5 8 ]
+  DEBUG:root:  TICK:  618 	IP:   17 	CR: LD32 	AR:   32 	DR:   20 	BR:    4 	STACK: [20 5 5 8 ]
+  DEBUG:root:  TICK:  625 	IP:   19 	CR: BGT  	AR:   17 	DR: BGT  	BR:    4 	STACK: [20 5 8 ]
+  DEBUG:root:  TICK:  630 	IP:   20 	CR: POP  	AR:   19 	DR: POP  	BR:    4 	STACK: [5 8 ]
+  DEBUG:root:  TICK:  637 	IP:   21 	CR: SWAP 	AR:   20 	DR: SWAP 	BR:    8 	STACK: [8 5 ]
+  DEBUG:root:  TICK:  648 	IP:   22 	CR: LD33 	AR:   33 	DR:   13 	BR:    8 	STACK: [13 8 5 ]
+  DEBUG:root:  TICK:  654 	IP:   23 	CR: ADD  	AR:   22 	DR: ADD  	BR:    8 	STACK: [21 5 ]
+  DEBUG:root:  TICK:  665 	IP:   24 	CR: ST0  	AR:    0 	DR:   21 	BR:    8 	STACK: [21 5 ]
+  DEBUG:root:  TICK:  670 	IP:   25 	CR: OUT  	AR:   24 	DR: OUT  	BR:    8 	STACK: [21 5 ]
+  DEBUG:root:  TICK:  681 	IP:   26 	CR: LD33 	AR:   33 	DR:   13 	BR:    8 	STACK: [13 21 5 ]
+  DEBUG:root:  TICK:  688 	IP:   27 	CR: SWAP 	AR:   26 	DR: SWAP 	BR:   21 	STACK: [21 13 5 ]
+  DEBUG:root:  TICK:  699 	IP:   28 	CR: ST33 	AR:   33 	DR:   21 	BR:   21 	STACK: [21 13 5 ]
+  DEBUG:root:  TICK:  704 	IP:   29 	CR: POP  	AR:   28 	DR: POP  	BR:   21 	STACK: [13 5 ]
+  DEBUG:root:  TICK:  711 	IP:   30 	CR: SWAP 	AR:   29 	DR: SWAP 	BR:    5 	STACK: [5 13 ]
+  DEBUG:root:  TICK:  721 	IP:   14 	CR: JUMP14 	AR:   14 	DR: INC  	BR:    5 	STACK: [5 13 ]
+  DEBUG:root:  TICK:  727 	IP:   15 	CR: INC  	AR:   14 	DR: INC  	BR:    5 	STACK: [6 13 ]
+  DEBUG:root:  TICK:  732 	IP:   16 	CR: DUP  	AR:   15 	DR: DUP  	BR:    5 	STACK: [6 6 13 ]
+  DEBUG:root:  TICK:  743 	IP:   17 	CR: LD32 	AR:   32 	DR:   20 	BR:    5 	STACK: [20 6 6 13 ]
+  DEBUG:root:  TICK:  750 	IP:   19 	CR: BGT  	AR:   17 	DR: BGT  	BR:    5 	STACK: [20 6 13 ]
+  DEBUG:root:  TICK:  755 	IP:   20 	CR: POP  	AR:   19 	DR: POP  	BR:    5 	STACK: [6 13 ]
+  DEBUG:root:  TICK:  762 	IP:   21 	CR: SWAP 	AR:   20 	DR: SWAP 	BR:   13 	STACK: [13 6 ]
+  DEBUG:root:  TICK:  773 	IP:   22 	CR: LD33 	AR:   33 	DR:   21 	BR:   13 	STACK: [21 13 6 ]
+  DEBUG:root:  TICK:  779 	IP:   23 	CR: ADD  	AR:   22 	DR: ADD  	BR:   13 	STACK: [34 6 ]
+  DEBUG:root:  TICK:  790 	IP:   24 	CR: ST0  	AR:    0 	DR:   34 	BR:   13 	STACK: [34 6 ]
+  DEBUG:root:  TICK:  795 	IP:   25 	CR: OUT  	AR:   24 	DR: OUT  	BR:   13 	STACK: [34 6 ]
+  DEBUG:root:  TICK:  806 	IP:   26 	CR: LD33 	AR:   33 	DR:   21 	BR:   13 	STACK: [21 34 6 ]
+  DEBUG:root:  TICK:  813 	IP:   27 	CR: SWAP 	AR:   26 	DR: SWAP 	BR:   34 	STACK: [34 21 6 ]
+  DEBUG:root:  TICK:  824 	IP:   28 	CR: ST33 	AR:   33 	DR:   34 	BR:   34 	STACK: [34 21 6 ]
+  DEBUG:root:  TICK:  829 	IP:   29 	CR: POP  	AR:   28 	DR: POP  	BR:   34 	STACK: [21 6 ]
+  DEBUG:root:  TICK:  836 	IP:   30 	CR: SWAP 	AR:   29 	DR: SWAP 	BR:    6 	STACK: [6 21 ]
+  DEBUG:root:  TICK:  846 	IP:   14 	CR: JUMP14 	AR:   14 	DR: INC  	BR:    6 	STACK: [6 21 ]
+  DEBUG:root:  TICK:  852 	IP:   15 	CR: INC  	AR:   14 	DR: INC  	BR:    6 	STACK: [7 21 ]
+  DEBUG:root:  TICK:  857 	IP:   16 	CR: DUP  	AR:   15 	DR: DUP  	BR:    6 	STACK: [7 7 21 ]
+  DEBUG:root:  TICK:  868 	IP:   17 	CR: LD32 	AR:   32 	DR:   20 	BR:    6 	STACK: [20 7 7 21 ]
+  DEBUG:root:  TICK:  875 	IP:   19 	CR: BGT  	AR:   17 	DR: BGT  	BR:    6 	STACK: [20 7 21 ]
+  DEBUG:root:  TICK:  880 	IP:   20 	CR: POP  	AR:   19 	DR: POP  	BR:    6 	STACK: [7 21 ]
+  DEBUG:root:  TICK:  887 	IP:   21 	CR: SWAP 	AR:   20 	DR: SWAP 	BR:   21 	STACK: [21 7 ]
+  DEBUG:root:  TICK:  898 	IP:   22 	CR: LD33 	AR:   33 	DR:   34 	BR:   21 	STACK: [34 21 7 ]
+  DEBUG:root:  TICK:  904 	IP:   23 	CR: ADD  	AR:   22 	DR: ADD  	BR:   21 	STACK: [55 7 ]
+  DEBUG:root:  TICK:  915 	IP:   24 	CR: ST0  	AR:    0 	DR:   55 	BR:   21 	STACK: [55 7 ]
+  DEBUG:root:  TICK:  920 	IP:   25 	CR: OUT  	AR:   24 	DR: OUT  	BR:   21 	STACK: [55 7 ]
+  DEBUG:root:  TICK:  931 	IP:   26 	CR: LD33 	AR:   33 	DR:   34 	BR:   21 	STACK: [34 55 7 ]
+  DEBUG:root:  TICK:  938 	IP:   27 	CR: SWAP 	AR:   26 	DR: SWAP 	BR:   55 	STACK: [55 34 7 ]
+  DEBUG:root:  TICK:  949 	IP:   28 	CR: ST33 	AR:   33 	DR:   55 	BR:   55 	STACK: [55 34 7 ]
+  DEBUG:root:  TICK:  954 	IP:   29 	CR: POP  	AR:   28 	DR: POP  	BR:   55 	STACK: [34 7 ]
+  DEBUG:root:  TICK:  961 	IP:   30 	CR: SWAP 	AR:   29 	DR: SWAP 	BR:    7 	STACK: [7 34 ]
+  DEBUG:root:  TICK:  971 	IP:   14 	CR: JUMP14 	AR:   14 	DR: INC  	BR:    7 	STACK: [7 34 ]
+  DEBUG:root:  TICK:  977 	IP:   15 	CR: INC  	AR:   14 	DR: INC  	BR:    7 	STACK: [8 34 ]
+  DEBUG:root:  TICK:  982 	IP:   16 	CR: DUP  	AR:   15 	DR: DUP  	BR:    7 	STACK: [8 8 34 ]
+  DEBUG:root:  TICK:  993 	IP:   17 	CR: LD32 	AR:   32 	DR:   20 	BR:    7 	STACK: [20 8 8 34 ]
+  DEBUG:root:  TICK: 1000 	IP:   19 	CR: BGT  	AR:   17 	DR: BGT  	BR:    7 	STACK: [20 8 34 ]
+  DEBUG:root:  TICK: 1005 	IP:   20 	CR: POP  	AR:   19 	DR: POP  	BR:    7 	STACK: [8 34 ]
+  DEBUG:root:  TICK: 1012 	IP:   21 	CR: SWAP 	AR:   20 	DR: SWAP 	BR:   34 	STACK: [34 8 ]
+  DEBUG:root:  TICK: 1023 	IP:   22 	CR: LD33 	AR:   33 	DR:   55 	BR:   34 	STACK: [55 34 8 ]
+  DEBUG:root:  TICK: 1029 	IP:   23 	CR: ADD  	AR:   22 	DR: ADD  	BR:   34 	STACK: [89 8 ]
+  DEBUG:root:  TICK: 1040 	IP:   24 	CR: ST0  	AR:    0 	DR:   89 	BR:   34 	STACK: [89 8 ]
+  DEBUG:root:  TICK: 1045 	IP:   25 	CR: OUT  	AR:   24 	DR: OUT  	BR:   34 	STACK: [89 8 ]
+  DEBUG:root:  TICK: 1056 	IP:   26 	CR: LD33 	AR:   33 	DR:   55 	BR:   34 	STACK: [55 89 8 ]
+  DEBUG:root:  TICK: 1063 	IP:   27 	CR: SWAP 	AR:   26 	DR: SWAP 	BR:   89 	STACK: [89 55 8 ]
+  DEBUG:root:  TICK: 1074 	IP:   28 	CR: ST33 	AR:   33 	DR:   89 	BR:   89 	STACK: [89 55 8 ]
+  DEBUG:root:  TICK: 1079 	IP:   29 	CR: POP  	AR:   28 	DR: POP  	BR:   89 	STACK: [55 8 ]
+  DEBUG:root:  TICK: 1086 	IP:   30 	CR: SWAP 	AR:   29 	DR: SWAP 	BR:    8 	STACK: [8 55 ]
+  DEBUG:root:  TICK: 1096 	IP:   14 	CR: JUMP14 	AR:   14 	DR: INC  	BR:    8 	STACK: [8 55 ]
+  DEBUG:root:  TICK: 1102 	IP:   15 	CR: INC  	AR:   14 	DR: INC  	BR:    8 	STACK: [9 55 ]
+  DEBUG:root:  TICK: 1107 	IP:   16 	CR: DUP  	AR:   15 	DR: DUP  	BR:    8 	STACK: [9 9 55 ]
+  DEBUG:root:  TICK: 1118 	IP:   17 	CR: LD32 	AR:   32 	DR:   20 	BR:    8 	STACK: [20 9 9 55 ]
+  DEBUG:root:  TICK: 1125 	IP:   19 	CR: BGT  	AR:   17 	DR: BGT  	BR:    8 	STACK: [20 9 55 ]
+  DEBUG:root:  TICK: 1130 	IP:   20 	CR: POP  	AR:   19 	DR: POP  	BR:    8 	STACK: [9 55 ]
+  DEBUG:root:  TICK: 1137 	IP:   21 	CR: SWAP 	AR:   20 	DR: SWAP 	BR:   55 	STACK: [55 9 ]
+  DEBUG:root:  TICK: 1148 	IP:   22 	CR: LD33 	AR:   33 	DR:   89 	BR:   55 	STACK: [89 55 9 ]
+  DEBUG:root:  TICK: 1154 	IP:   23 	CR: ADD  	AR:   22 	DR: ADD  	BR:   55 	STACK: [144 9 ]
+  DEBUG:root:  TICK: 1165 	IP:   24 	CR: ST0  	AR:    0 	DR:  144 	BR:   55 	STACK: [144 9 ]
+  DEBUG:root:  TICK: 1170 	IP:   25 	CR: OUT  	AR:   24 	DR: OUT  	BR:   55 	STACK: [144 9 ]
+  DEBUG:root:  TICK: 1181 	IP:   26 	CR: LD33 	AR:   33 	DR:   89 	BR:   55 	STACK: [89 144 9 ]
+  DEBUG:root:  TICK: 1188 	IP:   27 	CR: SWAP 	AR:   26 	DR: SWAP 	BR:  144 	STACK: [144 89 9 ]
+  DEBUG:root:  TICK: 1199 	IP:   28 	CR: ST33 	AR:   33 	DR:  144 	BR:  144 	STACK: [144 89 9 ]
+  DEBUG:root:  TICK: 1204 	IP:   29 	CR: POP  	AR:   28 	DR: POP  	BR:  144 	STACK: [89 9 ]
+  DEBUG:root:  TICK: 1211 	IP:   30 	CR: SWAP 	AR:   29 	DR: SWAP 	BR:    9 	STACK: [9 89 ]
+  DEBUG:root:  TICK: 1221 	IP:   14 	CR: JUMP14 	AR:   14 	DR: INC  	BR:    9 	STACK: [9 89 ]
+  DEBUG:root:  TICK: 1227 	IP:   15 	CR: INC  	AR:   14 	DR: INC  	BR:    9 	STACK: [10 89 ]
+  DEBUG:root:  TICK: 1232 	IP:   16 	CR: DUP  	AR:   15 	DR: DUP  	BR:    9 	STACK: [10 10 89 ]
+  DEBUG:root:  TICK: 1243 	IP:   17 	CR: LD32 	AR:   32 	DR:   20 	BR:    9 	STACK: [20 10 10 89 ]
+  DEBUG:root:  TICK: 1250 	IP:   19 	CR: BGT  	AR:   17 	DR: BGT  	BR:    9 	STACK: [20 10 89 ]
+  DEBUG:root:  TICK: 1255 	IP:   20 	CR: POP  	AR:   19 	DR: POP  	BR:    9 	STACK: [10 89 ]
+  DEBUG:root:  TICK: 1262 	IP:   21 	CR: SWAP 	AR:   20 	DR: SWAP 	BR:   89 	STACK: [89 10 ]
+  DEBUG:root:  TICK: 1273 	IP:   22 	CR: LD33 	AR:   33 	DR:  144 	BR:   89 	STACK: [144 89 10 ]
+  DEBUG:root:  TICK: 1279 	IP:   23 	CR: ADD  	AR:   22 	DR: ADD  	BR:   89 	STACK: [233 10 ]
+  DEBUG:root:  TICK: 1290 	IP:   24 	CR: ST0  	AR:    0 	DR:  233 	BR:   89 	STACK: [233 10 ]
+  DEBUG:root:  TICK: 1295 	IP:   25 	CR: OUT  	AR:   24 	DR: OUT  	BR:   89 	STACK: [233 10 ]
+  DEBUG:root:  TICK: 1306 	IP:   26 	CR: LD33 	AR:   33 	DR:  144 	BR:   89 	STACK: [144 233 10 ]
+  DEBUG:root:  TICK: 1313 	IP:   27 	CR: SWAP 	AR:   26 	DR: SWAP 	BR:  233 	STACK: [233 144 10 ]
+  DEBUG:root:  TICK: 1324 	IP:   28 	CR: ST33 	AR:   33 	DR:  233 	BR:  233 	STACK: [233 144 10 ]
+  DEBUG:root:  TICK: 1329 	IP:   29 	CR: POP  	AR:   28 	DR: POP  	BR:  233 	STACK: [144 10 ]
+  DEBUG:root:  TICK: 1336 	IP:   30 	CR: SWAP 	AR:   29 	DR: SWAP 	BR:   10 	STACK: [10 144 ]
+  DEBUG:root:  TICK: 1346 	IP:   14 	CR: JUMP14 	AR:   14 	DR: INC  	BR:   10 	STACK: [10 144 ]
+  DEBUG:root:  TICK: 1352 	IP:   15 	CR: INC  	AR:   14 	DR: INC  	BR:   10 	STACK: [11 144 ]
+  DEBUG:root:  TICK: 1357 	IP:   16 	CR: DUP  	AR:   15 	DR: DUP  	BR:   10 	STACK: [11 11 144 ]
+  DEBUG:root:  TICK: 1368 	IP:   17 	CR: LD32 	AR:   32 	DR:   20 	BR:   10 	STACK: [20 11 11 144 ]
+  DEBUG:root:  TICK: 1375 	IP:   19 	CR: BGT  	AR:   17 	DR: BGT  	BR:   10 	STACK: [20 11 144 ]
+  DEBUG:root:  TICK: 1380 	IP:   20 	CR: POP  	AR:   19 	DR: POP  	BR:   10 	STACK: [11 144 ]
+  DEBUG:root:  TICK: 1387 	IP:   21 	CR: SWAP 	AR:   20 	DR: SWAP 	BR:  144 	STACK: [144 11 ]
+  DEBUG:root:  TICK: 1398 	IP:   22 	CR: LD33 	AR:   33 	DR:  233 	BR:  144 	STACK: [233 144 11 ]
+  DEBUG:root:  TICK: 1404 	IP:   23 	CR: ADD  	AR:   22 	DR: ADD  	BR:  144 	STACK: [377 11 ]
+  DEBUG:root:  TICK: 1415 	IP:   24 	CR: ST0  	AR:    0 	DR:  377 	BR:  144 	STACK: [377 11 ]
+  DEBUG:root:  TICK: 1420 	IP:   25 	CR: OUT  	AR:   24 	DR: OUT  	BR:  144 	STACK: [377 11 ]
+  DEBUG:root:  TICK: 1431 	IP:   26 	CR: LD33 	AR:   33 	DR:  233 	BR:  144 	STACK: [233 377 11 ]
+  DEBUG:root:  TICK: 1438 	IP:   27 	CR: SWAP 	AR:   26 	DR: SWAP 	BR:  377 	STACK: [377 233 11 ]
+  DEBUG:root:  TICK: 1449 	IP:   28 	CR: ST33 	AR:   33 	DR:  377 	BR:  377 	STACK: [377 233 11 ]
+  DEBUG:root:  TICK: 1454 	IP:   29 	CR: POP  	AR:   28 	DR: POP  	BR:  377 	STACK: [233 11 ]
+  DEBUG:root:  TICK: 1461 	IP:   30 	CR: SWAP 	AR:   29 	DR: SWAP 	BR:   11 	STACK: [11 233 ]
+  DEBUG:root:  TICK: 1471 	IP:   14 	CR: JUMP14 	AR:   14 	DR: INC  	BR:   11 	STACK: [11 233 ]
+  DEBUG:root:  TICK: 1477 	IP:   15 	CR: INC  	AR:   14 	DR: INC  	BR:   11 	STACK: [12 233 ]
+  DEBUG:root:  TICK: 1482 	IP:   16 	CR: DUP  	AR:   15 	DR: DUP  	BR:   11 	STACK: [12 12 233 ]
+  DEBUG:root:  TICK: 1493 	IP:   17 	CR: LD32 	AR:   32 	DR:   20 	BR:   11 	STACK: [20 12 12 233 ]
+  DEBUG:root:  TICK: 1500 	IP:   19 	CR: BGT  	AR:   17 	DR: BGT  	BR:   11 	STACK: [20 12 233 ]
+  DEBUG:root:  TICK: 1505 	IP:   20 	CR: POP  	AR:   19 	DR: POP  	BR:   11 	STACK: [12 233 ]
+  DEBUG:root:  TICK: 1512 	IP:   21 	CR: SWAP 	AR:   20 	DR: SWAP 	BR:  233 	STACK: [233 12 ]
+  DEBUG:root:  TICK: 1523 	IP:   22 	CR: LD33 	AR:   33 	DR:  377 	BR:  233 	STACK: [377 233 12 ]
+  DEBUG:root:  TICK: 1529 	IP:   23 	CR: ADD  	AR:   22 	DR: ADD  	BR:  233 	STACK: [610 12 ]
+  DEBUG:root:  TICK: 1540 	IP:   24 	CR: ST0  	AR:    0 	DR:  610 	BR:  233 	STACK: [610 12 ]
+  DEBUG:root:  TICK: 1545 	IP:   25 	CR: OUT  	AR:   24 	DR: OUT  	BR:  233 	STACK: [610 12 ]
+  DEBUG:root:  TICK: 1556 	IP:   26 	CR: LD33 	AR:   33 	DR:  377 	BR:  233 	STACK: [377 610 12 ]
+  DEBUG:root:  TICK: 1563 	IP:   27 	CR: SWAP 	AR:   26 	DR: SWAP 	BR:  610 	STACK: [610 377 12 ]
+  DEBUG:root:  TICK: 1574 	IP:   28 	CR: ST33 	AR:   33 	DR:  610 	BR:  610 	STACK: [610 377 12 ]
+  DEBUG:root:  TICK: 1579 	IP:   29 	CR: POP  	AR:   28 	DR: POP  	BR:  610 	STACK: [377 12 ]
+  DEBUG:root:  TICK: 1586 	IP:   30 	CR: SWAP 	AR:   29 	DR: SWAP 	BR:   12 	STACK: [12 377 ]
+  DEBUG:root:  TICK: 1596 	IP:   14 	CR: JUMP14 	AR:   14 	DR: INC  	BR:   12 	STACK: [12 377 ]
+  DEBUG:root:  TICK: 1602 	IP:   15 	CR: INC  	AR:   14 	DR: INC  	BR:   12 	STACK: [13 377 ]
+  DEBUG:root:  TICK: 1607 	IP:   16 	CR: DUP  	AR:   15 	DR: DUP  	BR:   12 	STACK: [13 13 377 ]
+  DEBUG:root:  TICK: 1618 	IP:   17 	CR: LD32 	AR:   32 	DR:   20 	BR:   12 	STACK: [20 13 13 377 ]
+  DEBUG:root:  TICK: 1625 	IP:   19 	CR: BGT  	AR:   17 	DR: BGT  	BR:   12 	STACK: [20 13 377 ]
+  DEBUG:root:  TICK: 1630 	IP:   20 	CR: POP  	AR:   19 	DR: POP  	BR:   12 	STACK: [13 377 ]
+  DEBUG:root:  TICK: 1637 	IP:   21 	CR: SWAP 	AR:   20 	DR: SWAP 	BR:  377 	STACK: [377 13 ]
+  DEBUG:root:  TICK: 1648 	IP:   22 	CR: LD33 	AR:   33 	DR:  610 	BR:  377 	STACK: [610 377 13 ]
+  DEBUG:root:  TICK: 1654 	IP:   23 	CR: ADD  	AR:   22 	DR: ADD  	BR:  377 	STACK: [987 13 ]
+  DEBUG:root:  TICK: 1665 	IP:   24 	CR: ST0  	AR:    0 	DR:  987 	BR:  377 	STACK: [987 13 ]
+  DEBUG:root:  TICK: 1670 	IP:   25 	CR: OUT  	AR:   24 	DR: OUT  	BR:  377 	STACK: [987 13 ]
+  DEBUG:root:  TICK: 1681 	IP:   26 	CR: LD33 	AR:   33 	DR:  610 	BR:  377 	STACK: [610 987 13 ]
+  DEBUG:root:  TICK: 1688 	IP:   27 	CR: SWAP 	AR:   26 	DR: SWAP 	BR:  987 	STACK: [987 610 13 ]
+  DEBUG:root:  TICK: 1699 	IP:   28 	CR: ST33 	AR:   33 	DR:  987 	BR:  987 	STACK: [987 610 13 ]
+  DEBUG:root:  TICK: 1704 	IP:   29 	CR: POP  	AR:   28 	DR: POP  	BR:  987 	STACK: [610 13 ]
+  DEBUG:root:  TICK: 1711 	IP:   30 	CR: SWAP 	AR:   29 	DR: SWAP 	BR:   13 	STACK: [13 610 ]
+  DEBUG:root:  TICK: 1721 	IP:   14 	CR: JUMP14 	AR:   14 	DR: INC  	BR:   13 	STACK: [13 610 ]
+  DEBUG:root:  TICK: 1727 	IP:   15 	CR: INC  	AR:   14 	DR: INC  	BR:   13 	STACK: [14 610 ]
+  DEBUG:root:  TICK: 1732 	IP:   16 	CR: DUP  	AR:   15 	DR: DUP  	BR:   13 	STACK: [14 14 610 ]
+  DEBUG:root:  TICK: 1743 	IP:   17 	CR: LD32 	AR:   32 	DR:   20 	BR:   13 	STACK: [20 14 14 610 ]
+  DEBUG:root:  TICK: 1750 	IP:   19 	CR: BGT  	AR:   17 	DR: BGT  	BR:   13 	STACK: [20 14 610 ]
+  DEBUG:root:  TICK: 1755 	IP:   20 	CR: POP  	AR:   19 	DR: POP  	BR:   13 	STACK: [14 610 ]
+  DEBUG:root:  TICK: 1762 	IP:   21 	CR: SWAP 	AR:   20 	DR: SWAP 	BR:  610 	STACK: [610 14 ]
+  DEBUG:root:  TICK: 1773 	IP:   22 	CR: LD33 	AR:   33 	DR:  987 	BR:  610 	STACK: [987 610 14 ]
+  DEBUG:root:  TICK: 1779 	IP:   23 	CR: ADD  	AR:   22 	DR: ADD  	BR:  610 	STACK: [1597 14 ]
+  DEBUG:root:  TICK: 1790 	IP:   24 	CR: ST0  	AR:    0 	DR: 1597 	BR:  610 	STACK: [1597 14 ]
+  DEBUG:root:  TICK: 1795 	IP:   25 	CR: OUT  	AR:   24 	DR: OUT  	BR:  610 	STACK: [1597 14 ]
+  DEBUG:root:  TICK: 1806 	IP:   26 	CR: LD33 	AR:   33 	DR:  987 	BR:  610 	STACK: [987 1597 14 ]
+  DEBUG:root:  TICK: 1813 	IP:   27 	CR: SWAP 	AR:   26 	DR: SWAP 	BR: 1597 	STACK: [1597 987 14 ]
+  DEBUG:root:  TICK: 1824 	IP:   28 	CR: ST33 	AR:   33 	DR: 1597 	BR: 1597 	STACK: [1597 987 14 ]
+  DEBUG:root:  TICK: 1829 	IP:   29 	CR: POP  	AR:   28 	DR: POP  	BR: 1597 	STACK: [987 14 ]
+  DEBUG:root:  TICK: 1836 	IP:   30 	CR: SWAP 	AR:   29 	DR: SWAP 	BR:   14 	STACK: [14 987 ]
+  DEBUG:root:  TICK: 1846 	IP:   14 	CR: JUMP14 	AR:   14 	DR: INC  	BR:   14 	STACK: [14 987 ]
+  DEBUG:root:  TICK: 1852 	IP:   15 	CR: INC  	AR:   14 	DR: INC  	BR:   14 	STACK: [15 987 ]
+  DEBUG:root:  TICK: 1857 	IP:   16 	CR: DUP  	AR:   15 	DR: DUP  	BR:   14 	STACK: [15 15 987 ]
+  DEBUG:root:  TICK: 1868 	IP:   17 	CR: LD32 	AR:   32 	DR:   20 	BR:   14 	STACK: [20 15 15 987 ]
+  DEBUG:root:  TICK: 1875 	IP:   19 	CR: BGT  	AR:   17 	DR: BGT  	BR:   14 	STACK: [20 15 987 ]
+  DEBUG:root:  TICK: 1880 	IP:   20 	CR: POP  	AR:   19 	DR: POP  	BR:   14 	STACK: [15 987 ]
+  DEBUG:root:  TICK: 1887 	IP:   21 	CR: SWAP 	AR:   20 	DR: SWAP 	BR:  987 	STACK: [987 15 ]
+  DEBUG:root:  TICK: 1898 	IP:   22 	CR: LD33 	AR:   33 	DR: 1597 	BR:  987 	STACK: [1597 987 15 ]
+  DEBUG:root:  TICK: 1904 	IP:   23 	CR: ADD  	AR:   22 	DR: ADD  	BR:  987 	STACK: [2584 15 ]
+  DEBUG:root:  TICK: 1915 	IP:   24 	CR: ST0  	AR:    0 	DR: 2584 	BR:  987 	STACK: [2584 15 ]
+  DEBUG:root:  TICK: 1920 	IP:   25 	CR: OUT  	AR:   24 	DR: OUT  	BR:  987 	STACK: [2584 15 ]
+  DEBUG:root:  TICK: 1931 	IP:   26 	CR: LD33 	AR:   33 	DR: 1597 	BR:  987 	STACK: [1597 2584 15 ]
+  DEBUG:root:  TICK: 1938 	IP:   27 	CR: SWAP 	AR:   26 	DR: SWAP 	BR: 2584 	STACK: [2584 1597 15 ]
+  DEBUG:root:  TICK: 1949 	IP:   28 	CR: ST33 	AR:   33 	DR: 2584 	BR: 2584 	STACK: [2584 1597 15 ]
+  DEBUG:root:  TICK: 1954 	IP:   29 	CR: POP  	AR:   28 	DR: POP  	BR: 2584 	STACK: [1597 15 ]
+  DEBUG:root:  TICK: 1961 	IP:   30 	CR: SWAP 	AR:   29 	DR: SWAP 	BR:   15 	STACK: [15 1597 ]
+  DEBUG:root:  TICK: 1971 	IP:   14 	CR: JUMP14 	AR:   14 	DR: INC  	BR:   15 	STACK: [15 1597 ]
+  DEBUG:root:  TICK: 1977 	IP:   15 	CR: INC  	AR:   14 	DR: INC  	BR:   15 	STACK: [16 1597 ]
+  DEBUG:root:  TICK: 1982 	IP:   16 	CR: DUP  	AR:   15 	DR: DUP  	BR:   15 	STACK: [16 16 1597 ]
+  DEBUG:root:  TICK: 1993 	IP:   17 	CR: LD32 	AR:   32 	DR:   20 	BR:   15 	STACK: [20 16 16 1597 ]
+  DEBUG:root:  TICK: 2000 	IP:   19 	CR: BGT  	AR:   17 	DR: BGT  	BR:   15 	STACK: [20 16 1597 ]
+  DEBUG:root:  TICK: 2005 	IP:   20 	CR: POP  	AR:   19 	DR: POP  	BR:   15 	STACK: [16 1597 ]
+  DEBUG:root:  TICK: 2012 	IP:   21 	CR: SWAP 	AR:   20 	DR: SWAP 	BR: 1597 	STACK: [1597 16 ]
+  DEBUG:root:  TICK: 2023 	IP:   22 	CR: LD33 	AR:   33 	DR: 2584 	BR: 1597 	STACK: [2584 1597 16 ]
+  DEBUG:root:  TICK: 2029 	IP:   23 	CR: ADD  	AR:   22 	DR: ADD  	BR: 1597 	STACK: [4181 16 ]
+  DEBUG:root:  TICK: 2040 	IP:   24 	CR: ST0  	AR:    0 	DR: 4181 	BR: 1597 	STACK: [4181 16 ]
+  DEBUG:root:  TICK: 2045 	IP:   25 	CR: OUT  	AR:   24 	DR: OUT  	BR: 1597 	STACK: [4181 16 ]
+  DEBUG:root:  TICK: 2056 	IP:   26 	CR: LD33 	AR:   33 	DR: 2584 	BR: 1597 	STACK: [2584 4181 16 ]
+  DEBUG:root:  TICK: 2063 	IP:   27 	CR: SWAP 	AR:   26 	DR: SWAP 	BR: 4181 	STACK: [4181 2584 16 ]
+  DEBUG:root:  TICK: 2074 	IP:   28 	CR: ST33 	AR:   33 	DR: 4181 	BR: 4181 	STACK: [4181 2584 16 ]
+  DEBUG:root:  TICK: 2079 	IP:   29 	CR: POP  	AR:   28 	DR: POP  	BR: 4181 	STACK: [2584 16 ]
+  DEBUG:root:  TICK: 2086 	IP:   30 	CR: SWAP 	AR:   29 	DR: SWAP 	BR:   16 	STACK: [16 2584 ]
+  DEBUG:root:  TICK: 2096 	IP:   14 	CR: JUMP14 	AR:   14 	DR: INC  	BR:   16 	STACK: [16 2584 ]
+  DEBUG:root:  TICK: 2102 	IP:   15 	CR: INC  	AR:   14 	DR: INC  	BR:   16 	STACK: [17 2584 ]
+  DEBUG:root:  TICK: 2107 	IP:   16 	CR: DUP  	AR:   15 	DR: DUP  	BR:   16 	STACK: [17 17 2584 ]
+  DEBUG:root:  TICK: 2118 	IP:   17 	CR: LD32 	AR:   32 	DR:   20 	BR:   16 	STACK: [20 17 17 2584 ]
+  DEBUG:root:  TICK: 2125 	IP:   19 	CR: BGT  	AR:   17 	DR: BGT  	BR:   16 	STACK: [20 17 2584 ]
+  DEBUG:root:  TICK: 2130 	IP:   20 	CR: POP  	AR:   19 	DR: POP  	BR:   16 	STACK: [17 2584 ]
+  DEBUG:root:  TICK: 2137 	IP:   21 	CR: SWAP 	AR:   20 	DR: SWAP 	BR: 2584 	STACK: [2584 17 ]
+  DEBUG:root:  TICK: 2148 	IP:   22 	CR: LD33 	AR:   33 	DR: 4181 	BR: 2584 	STACK: [4181 2584 17 ]
+  DEBUG:root:  TICK: 2154 	IP:   23 	CR: ADD  	AR:   22 	DR: ADD  	BR: 2584 	STACK: [6765 17 ]
+  DEBUG:root:  TICK: 2165 	IP:   24 	CR: ST0  	AR:    0 	DR: 6765 	BR: 2584 	STACK: [6765 17 ]
+  DEBUG:root:  TICK: 2170 	IP:   25 	CR: OUT  	AR:   24 	DR: OUT  	BR: 2584 	STACK: [6765 17 ]
+  DEBUG:root:  TICK: 2181 	IP:   26 	CR: LD33 	AR:   33 	DR: 4181 	BR: 2584 	STACK: [4181 6765 17 ]
+  DEBUG:root:  TICK: 2188 	IP:   27 	CR: SWAP 	AR:   26 	DR: SWAP 	BR: 6765 	STACK: [6765 4181 17 ]
+  DEBUG:root:  TICK: 2199 	IP:   28 	CR: ST33 	AR:   33 	DR: 6765 	BR: 6765 	STACK: [6765 4181 17 ]
+  DEBUG:root:  TICK: 2204 	IP:   29 	CR: POP  	AR:   28 	DR: POP  	BR: 6765 	STACK: [4181 17 ]
+  DEBUG:root:  TICK: 2211 	IP:   30 	CR: SWAP 	AR:   29 	DR: SWAP 	BR:   17 	STACK: [17 4181 ]
+  DEBUG:root:  TICK: 2221 	IP:   14 	CR: JUMP14 	AR:   14 	DR: INC  	BR:   17 	STACK: [17 4181 ]
+  DEBUG:root:  TICK: 2227 	IP:   15 	CR: INC  	AR:   14 	DR: INC  	BR:   17 	STACK: [18 4181 ]
+  DEBUG:root:  TICK: 2232 	IP:   16 	CR: DUP  	AR:   15 	DR: DUP  	BR:   17 	STACK: [18 18 4181 ]
+  DEBUG:root:  TICK: 2243 	IP:   17 	CR: LD32 	AR:   32 	DR:   20 	BR:   17 	STACK: [20 18 18 4181 ]
+  DEBUG:root:  TICK: 2250 	IP:   19 	CR: BGT  	AR:   17 	DR: BGT  	BR:   17 	STACK: [20 18 4181 ]
+  DEBUG:root:  TICK: 2255 	IP:   20 	CR: POP  	AR:   19 	DR: POP  	BR:   17 	STACK: [18 4181 ]
+  DEBUG:root:  TICK: 2262 	IP:   21 	CR: SWAP 	AR:   20 	DR: SWAP 	BR: 4181 	STACK: [4181 18 ]
+  DEBUG:root:  TICK: 2273 	IP:   22 	CR: LD33 	AR:   33 	DR: 6765 	BR: 4181 	STACK: [6765 4181 18 ]
+  DEBUG:root:  TICK: 2279 	IP:   23 	CR: ADD  	AR:   22 	DR: ADD  	BR: 4181 	STACK: [10946 18 ]
+  DEBUG:root:  TICK: 2290 	IP:   24 	CR: ST0  	AR:    0 	DR: 10946 	BR: 4181 	STACK: [10946 18 ]
+  DEBUG:root:  TICK: 2295 	IP:   25 	CR: OUT  	AR:   24 	DR: OUT  	BR: 4181 	STACK: [10946 18 ]
+  DEBUG:root:  TICK: 2306 	IP:   26 	CR: LD33 	AR:   33 	DR: 6765 	BR: 4181 	STACK: [6765 10946 18 ]
+  DEBUG:root:  TICK: 2313 	IP:   27 	CR: SWAP 	AR:   26 	DR: SWAP 	BR: 10946 	STACK: [10946 6765 18 ]
+  DEBUG:root:  TICK: 2324 	IP:   28 	CR: ST33 	AR:   33 	DR: 10946 	BR: 10946 	STACK: [10946 6765 18 ]
+  DEBUG:root:  TICK: 2329 	IP:   29 	CR: POP  	AR:   28 	DR: POP  	BR: 10946 	STACK: [6765 18 ]
+  DEBUG:root:  TICK: 2336 	IP:   30 	CR: SWAP 	AR:   29 	DR: SWAP 	BR:   18 	STACK: [18 6765 ]
+  DEBUG:root:  TICK: 2346 	IP:   14 	CR: JUMP14 	AR:   14 	DR: INC  	BR:   18 	STACK: [18 6765 ]
+  DEBUG:root:  TICK: 2352 	IP:   15 	CR: INC  	AR:   14 	DR: INC  	BR:   18 	STACK: [19 6765 ]
+  DEBUG:root:  TICK: 2357 	IP:   16 	CR: DUP  	AR:   15 	DR: DUP  	BR:   18 	STACK: [19 19 6765 ]
+  DEBUG:root:  TICK: 2368 	IP:   17 	CR: LD32 	AR:   32 	DR:   20 	BR:   18 	STACK: [20 19 19 6765 ]
+  DEBUG:root:  TICK: 2375 	IP:   19 	CR: BGT  	AR:   17 	DR: BGT  	BR:   18 	STACK: [20 19 6765 ]
+  DEBUG:root:  TICK: 2380 	IP:   20 	CR: POP  	AR:   19 	DR: POP  	BR:   18 	STACK: [19 6765 ]
+  DEBUG:root:  TICK: 2387 	IP:   21 	CR: SWAP 	AR:   20 	DR: SWAP 	BR: 6765 	STACK: [6765 19 ]
+  DEBUG:root:  TICK: 2398 	IP:   22 	CR: LD33 	AR:   33 	DR: 10946 	BR: 6765 	STACK: [10946 6765 19 ]
+  DEBUG:root:  TICK: 2404 	IP:   23 	CR: ADD  	AR:   22 	DR: ADD  	BR: 6765 	STACK: [17711 19 ]
+  DEBUG:root:  TICK: 2415 	IP:   24 	CR: ST0  	AR:    0 	DR: 17711 	BR: 6765 	STACK: [17711 19 ]
+  DEBUG:root:  TICK: 2420 	IP:   25 	CR: OUT  	AR:   24 	DR: OUT  	BR: 6765 	STACK: [17711 19 ]
+  DEBUG:root:  TICK: 2431 	IP:   26 	CR: LD33 	AR:   33 	DR: 10946 	BR: 6765 	STACK: [10946 17711 19 ]
+  DEBUG:root:  TICK: 2438 	IP:   27 	CR: SWAP 	AR:   26 	DR: SWAP 	BR: 17711 	STACK: [17711 10946 19 ]
+  DEBUG:root:  TICK: 2449 	IP:   28 	CR: ST33 	AR:   33 	DR: 17711 	BR: 17711 	STACK: [17711 10946 19 ]
+  DEBUG:root:  TICK: 2454 	IP:   29 	CR: POP  	AR:   28 	DR: POP  	BR: 17711 	STACK: [10946 19 ]
+  DEBUG:root:  TICK: 2461 	IP:   30 	CR: SWAP 	AR:   29 	DR: SWAP 	BR:   19 	STACK: [19 10946 ]
+  DEBUG:root:  TICK: 2471 	IP:   14 	CR: JUMP14 	AR:   14 	DR: INC  	BR:   19 	STACK: [19 10946 ]
+  DEBUG:root:  TICK: 2477 	IP:   15 	CR: INC  	AR:   14 	DR: INC  	BR:   19 	STACK: [20 10946 ]
+  DEBUG:root:  TICK: 2482 	IP:   16 	CR: DUP  	AR:   15 	DR: DUP  	BR:   19 	STACK: [20 20 10946 ]
+  DEBUG:root:  TICK: 2493 	IP:   17 	CR: LD32 	AR:   32 	DR:   20 	BR:   19 	STACK: [20 20 20 10946 ]
+  DEBUG:root:  TICK: 2500 	IP:   19 	CR: BGT  	AR:   17 	DR: BGT  	BR:   19 	STACK: [20 20 10946 ]
+  DEBUG:root:  TICK: 2505 	IP:   20 	CR: POP  	AR:   19 	DR: POP  	BR:   19 	STACK: [20 10946 ]
+  DEBUG:root:  TICK: 2512 	IP:   21 	CR: SWAP 	AR:   20 	DR: SWAP 	BR: 10946 	STACK: [10946 20 ]
+  DEBUG:root:  TICK: 2523 	IP:   22 	CR: LD33 	AR:   33 	DR: 17711 	BR: 10946 	STACK: [17711 10946 20 ]
+  DEBUG:root:  TICK: 2529 	IP:   23 	CR: ADD  	AR:   22 	DR: ADD  	BR: 10946 	STACK: [28657 20 ]
+  DEBUG:root:  TICK: 2540 	IP:   24 	CR: ST0  	AR:    0 	DR: 28657 	BR: 10946 	STACK: [28657 20 ]
+  DEBUG:root:  TICK: 2545 	IP:   25 	CR: OUT  	AR:   24 	DR: OUT  	BR: 10946 	STACK: [28657 20 ]
+  DEBUG:root:  TICK: 2556 	IP:   26 	CR: LD33 	AR:   33 	DR: 17711 	BR: 10946 	STACK: [17711 28657 20 ]
+  DEBUG:root:  TICK: 2563 	IP:   27 	CR: SWAP 	AR:   26 	DR: SWAP 	BR: 28657 	STACK: [28657 17711 20 ]
+  DEBUG:root:  TICK: 2574 	IP:   28 	CR: ST33 	AR:   33 	DR: 28657 	BR: 28657 	STACK: [28657 17711 20 ]
+  DEBUG:root:  TICK: 2579 	IP:   29 	CR: POP  	AR:   28 	DR: POP  	BR: 28657 	STACK: [17711 20 ]
+  DEBUG:root:  TICK: 2586 	IP:   30 	CR: SWAP 	AR:   29 	DR: SWAP 	BR:   20 	STACK: [20 17711 ]
+  DEBUG:root:  TICK: 2596 	IP:   14 	CR: JUMP14 	AR:   14 	DR: INC  	BR:   20 	STACK: [20 17711 ]
+  DEBUG:root:  TICK: 2602 	IP:   15 	CR: INC  	AR:   14 	DR: INC  	BR:   20 	STACK: [21 17711 ]
+  DEBUG:root:  TICK: 2607 	IP:   16 	CR: DUP  	AR:   15 	DR: DUP  	BR:   20 	STACK: [21 21 17711 ]
+  DEBUG:root:  TICK: 2618 	IP:   17 	CR: LD32 	AR:   32 	DR:   20 	BR:   20 	STACK: [20 21 21 17711 ]
+  DEBUG:root:  TICK: 2624 	IP:   18 	CR: BGT  	AR:   17 	DR: BGT  	BR:   20 	STACK: [20 21 17711 ]
+  DEBUG:root:  TICK: 2634 	IP:   31 	CR: JUMP31 	AR:   31 	DR: HLT  	BR:   20 	STACK: [20 21 17711 ]
