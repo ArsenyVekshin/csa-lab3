@@ -1,14 +1,16 @@
+from src.isa import Instruction
+
 class Memory:
     memory = None
     start_of_variables = None
     value = None
 
-    def __init__(self, code, start_of_variables):
+    def __init__(self, code, start_of_variables, buff_size):
         self.start_of_variables = start_of_variables
-        self.memory = [0] * len(code)
+        self.memory = [0] * (len(code)+buff_size)
         self.value = 0
-        for number, instraction in enumerate(code, 0):
-            self.memory[number] = instraction
+        for number, instruction in enumerate(code, 0):
+            self.memory[number] = instruction
 
     def read(self, adr):
         self.value = self.memory[adr]
@@ -17,7 +19,10 @@ class Memory:
         self.memory[adr] = self.value
 
     def __repr__(self):
-        buff = ""
+        out = ""
         for i in range(len(self.memory)):
-            buff += "{:4} : \t {}\n".format(i, self.memory[i])
-        return buff
+            buff = ""
+            if type(self.memory[i]) is int: buff = "{:2} <-> \'{}\'".format(self.memory[i], chr(self.memory[i]))
+            else: buff = self.memory[i].getShortNote()
+            out += "{:4} : \t {}\n".format(i, buff)
+        return out

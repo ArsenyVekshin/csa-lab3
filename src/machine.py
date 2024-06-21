@@ -17,10 +17,10 @@ class WrongInstructionFormat(Exception):
         super().__init__(f"Error: unable to parse instruction {instr} at ip = {ip} - wrong format")
 
 class DataPath:
-    def __init__(self, code, start_of_variables):
+    def __init__(self, code, start_of_variables, input_tokens_size = SIZE_FOR_VARS):
         self.data_stack = Stack(STACK_SIZE)
         self.alu = ALU()
-        self.memory = Memory(code, start_of_variables)
+        self.memory = Memory(code, start_of_variables, input_tokens_size)
         self.ip = 1
         self.tos = 0
         self.ar = 0
@@ -96,12 +96,13 @@ class DataPath:
 
 
 class IOController:
-    def __init__(self, dataPath, inputBuffer, memAddr):
+    def __init__(self, dataPath, inputBuffer, memAddr, output_file):
         self.iter = 0
         self.dataPath = dataPath
         self.inputBuffer = inputBuffer
         self.outputBuffer = []
         self.memAddr = memAddr
+        self.output_file = output_file
 
     def __repr__(self):
         return "IN: {} OUT: {}".format(
@@ -110,8 +111,13 @@ class IOController:
         )
 
     def get(self):
-        assert self.iter >= len(self.inputBuffer), "Internal error: not enough symbols at buffer to read"
-        self.dataPath.memory.value = self.inputBuffer[self.iter]
+        assert self.iter < len(self.inputBuffer),(
+            "Internal error: not enough symbols at buffer to read {} >= {}".format(self.iter, len(self.inputBuffer)))
+
+        if type(self.inputBuffer[self.iter]) is not int:
+            self.dataPath.memory.value = ord(self.inputBuffer[self.iter])
+        else:
+            self.dataPath.memory.value = self.inputBuffer[self.iter]
         self.dataPath.memory.write(self.memAddr)
         self.iter += 1
 
@@ -119,7 +125,12 @@ class IOController:
         self.dataPath.memory.read(self.memAddr)
         self.outputBuffer.append(self.dataPath.memory.value)
         # print("OUT: ", self.outputBuffer)
-
+    def finish(self):
+        print(self.outputBuffer)
+        file = open(self.output_file, "w+", encoding="utf-8")
+        for s in self.outputBuffer:
+            file.write(chr(s))
+        file.close()
 
 class ControlUnit:
     def __init__(self, dataPath: DataPath, ioController:IOController):
@@ -139,16 +150,7 @@ class ControlUnit:
             self.dataPath.br,
             "[" + str(self.dataPath.tos) + " " + str(self.dataPath.data_stack) + "]",
         )
-        # return "IP: {:3} CR: {:3} AR: {:3} DR: {:3} BR: {:3} \n\tSTACK: {} RETURN_STACK: {} \n\tMEMORY: {}".format(
-        #     self.dataPath.ip,
-        #     self.cr,
-        #     self.dataPath.ar,
-        #     self.dataPath.dr,
-        #     self.dataPath.br,
-        #     [self.dataPath.tos] + self.dataPath.data_stack.stack,
-        #     self.return_stack.stack,
-        #     self.dataPath.memory
-        # )
+
 
     def instructionFetch(self):
         self.dataPath.signal_latch_AR(ARMux.IP)
@@ -287,8 +289,8 @@ class ControlUnit:
 
         elif cmd.opcode == Opcode.HLT:
             print("Got HLT cmd. Finishing execution...")
+            self.ioController.finish()
             print(self.dataPath.memory)
-            print(self.ioController.outputBuffer)
             sys.exit(1)
 
     def execute(self):
@@ -298,9 +300,9 @@ class ControlUnit:
         self.executionFetch(cmd)
 
 
-def simulation(code, input_tokens, limit):
-    dataPath = DataPath(code, limit)
-    ioController = IOController(dataPath, input_tokens, 0)
+def simulation(code, input_tokens, limit, output_file):
+    dataPath = DataPath(code, limit, input_tokens[0])
+    ioController = IOController(dataPath, input_tokens, 0, output_file)
     controlUnit = ControlUnit(dataPath, ioController)
     instr_counter = 0
 
@@ -318,7 +320,7 @@ def simulation(code, input_tokens, limit):
     logging.info("output_buffer: %s", repr("".join(controlUnit.ioController.outputBuffer)))
     return "".join(dataPath.output_buffer), instr_counter, dataPath.ip
 
-def main(code_file, input_file):
+def main(code_file, input_file, output_file):
     with open(code_file, encoding="utf-8") as file:
         code = json.loads(file.read())
         machine_code = list(map(lambda d: Instruction(**d), code))
@@ -328,12 +330,14 @@ def main(code_file, input_file):
         if machine_code[i].opcode == Opcode.NOP.value:
             machine_code[i] = machine_code[i].arg
 
-    print(machine_code, sep="\n")
+    input_text = []
     with open(input_file, encoding="utf-8") as file:
-        input_text = file.readline()
+        input_text += list(file.readline())
+    input_text = [len(input_text)-1] + input_text
 
+    print(input_text)
     output, instr_counter, ticks = simulation(
-        machine_code, input_text, INSTRUCTION_LIMIT
+        machine_code, input_text, INSTRUCTION_LIMIT, output_file
     )
 
     print("".join(output))
@@ -341,6 +345,6 @@ def main(code_file, input_file):
 
 if __name__ == "__main__":
     logging.getLogger().setLevel(logging.DEBUG)
-    assert len(sys.argv) == 3, "Wrong arguments: machine.py <code_file> <input_file>"
-    _, code_file, input_file = sys.argv
-    main(code_file, input_file)
+    assert len(sys.argv) == 4, "Wrong arguments: machine.py <code_file> <input_file> <output_file>"
+    _, code_file, input_file, output_file = sys.argv
+    main(code_file, input_file, output_file)
