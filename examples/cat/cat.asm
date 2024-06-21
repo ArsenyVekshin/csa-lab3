@@ -11,15 +11,16 @@ BEGIN:  ; input(len(username)
     POP
 
 INPUTLOOP:  ; input(username)
+    INC
     LD USERLEN
     SWAP
     BLT     ; прошли заданное количество символов?
     JUMP END
     IN
+    OUT
     LD IOVALUE
     ST [PTR]+
     POP
-    INC
     JUMP INPUTLOOP
 
 END:

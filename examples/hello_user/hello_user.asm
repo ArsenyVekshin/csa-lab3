@@ -11,6 +11,7 @@ BEGIN:  ; input(len(username)
     POP
 
 INPUTLOOP:  ; input(username)
+    INC
     LD USERLEN
     SWAP
     BLT     ; прошли заданное количество символов?
@@ -19,7 +20,6 @@ INPUTLOOP:  ; input(username)
     LD IOVALUE
     ST [PTR]+
     POP
-    INC
     JUMP INPUTLOOP
 
 OUTPUT1:
@@ -61,12 +61,15 @@ OUTPUTLOOP2:
     JUMP OUTPUTLOOP2
 
 END:
+    LD #33
+    ST IOVALUE
+    OUT
     HLT
 
 PTR:
     WORD 0
 HELLOLEN:
-    WORD 8
+    WORD 7
 HELLOMSG:
     WORD 72
     WORD 101
