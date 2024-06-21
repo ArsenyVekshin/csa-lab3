@@ -29,11 +29,7 @@ def test_bar(golden, caplog):
 
 
         translator.main(source_file, target_file)
-        # print("=" * 5)
-        # print("target_file")
-        #show target_file content
-        # with open(target_file, encoding="utf-8") as file:
-        #     print(file.read())
+
 
         machine.main(target_file, input_file, output_file, golden["output_mode"])
 

@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 import sys
 
-from isa import Addressing, Instruction,  CodeEncoder, Opcode
+from src.isa import Addressing, Instruction,  CodeEncoder, Opcode
 
 
 # flake8: noqa: C901

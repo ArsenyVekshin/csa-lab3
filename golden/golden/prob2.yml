@@ -41,10 +41,10 @@ in_source: |-
       WORD 10
   BUFF:
       WORD 0
-
 in_stdin: |-
  [20, 1, 2]
-
+output_mode: |-
+ numeric
 out_code: |-
   [
       {
@@ -252,19 +252,13 @@ out_code: |-
           "addressing": 0
       }
   ]
-
-output_mode: |-
- numeric
-
 out_stdout: |
  source LoC: 1 code instr: 34
  ============================================================
  instructions_executed: 338 ticks: 2638
 
-
 out_global: |-
  1 2 3 5 8 13 21 34 55 89 144 233 377 610 987 1597 2584 4181 6765 10946 17711 28657 
-
 
 out_log: |-
  DEBUG    root:machine.py:348   TICK:    0 	IP:    1 	CR:    0 	AR:    0 	DR:    0 	BR:    0 	STACK: [0 ]

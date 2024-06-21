@@ -130,7 +130,7 @@ class IOController:
     def finish(self):
         file = open(self.output_file, "w+", encoding="utf-8")
         for s in self.outputBuffer:
-            if output_mode == "text":
+            if self.output_mode == "text":
                 file.write(chr(s))
             else:
                 file.write(str(s))

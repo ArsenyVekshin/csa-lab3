@@ -46,6 +46,8 @@ in_stdin: |-
 output_mode: |-
  text
  
+
+
 out_code: |-
  [
      {
@@ -237,7 +239,7 @@ out_stdout: |
 out_global: |-
  Hello
 
-out_log: |
+out_log: |-
  DEBUG    root:machine.py:348   TICK:    0 	IP:    1 	CR:    0 	AR:    0 	DR:    0 	BR:    0 	STACK: [0 ]
  DEBUG    root:machine.py:353   TICK:    7 	IP:    2 	CR: LD19 	AR:    1 	DR:   19 	BR:    0 	STACK: [19 ]
  DEBUG    root:machine.py:353   TICK:   18 	IP:    3 	CR: ST17 	AR:   17 	DR:   19 	BR:    0 	STACK: [19 ]

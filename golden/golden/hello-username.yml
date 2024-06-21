@@ -479,14 +479,13 @@ out_code: |-
      }
  ]
 
+output_mode: |-
+ text
 
 out_stdout: |
  source LoC: 1 code instr: 65
  ============================================================
  instructions_executed: 330 ticks: 2731
-
-output_mode: |-
- text
 
 out_global: |-
  Hello, i wanna die!
